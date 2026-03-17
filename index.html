@@ -1,0 +1,2121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Coach Ahmed Gamal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Tajawal:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+<style>
+:root {
+  --ink: #0a0a08;
+  --paper: #f5f2eb;
+  --cream: #ede8dd;
+  --bone: #d9d2c5;
+  --accent: #c8410a;
+  --accent-warm: #e05a1e;
+  --accent-pale: #f0cbb8;
+  --gold: #c49a3c;
+  --gold-light: #dbb85a;
+  --forest: #1a2e1e;
+  --sage: #4a6650;
+  --text-dim: #6b6560;
+  --text-faint: #9e9890;
+  --border: rgba(10,10,8,0.1);
+  --border-strong: rgba(10,10,8,0.2);
+  --transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Tajawal', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ── NOISE TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.4;
+}
+
+/* ── PRELOADER ── */
+#preloader {
+  position: fixed; inset: 0; background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9998; flex-direction: column; gap: 40px;
+  transition: opacity 0.8s ease;
+}
+.pre-word {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 8vw, 80px);
+  font-weight: 800; color: var(--paper);
+  letter-spacing: -2px; overflow: hidden;
+}
+.pre-word span {
+  display: inline-block;
+  animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.pre-word span:nth-child(2) { animation-delay: 0.1s; color: var(--accent); }
+.pre-word span:nth-child(3) { animation-delay: 0.15s; }
+.pre-line {
+  width: 120px; height: 1px;
+  background: rgba(255,255,255,0.15);
+  position: relative; overflow: hidden;
+}
+.pre-line::after {
+  content: ''; position: absolute; inset-block: 0; right: 0;
+  width: 0; background: var(--accent);
+  animation: fillLine 1.2s ease forwards 0.3s;
+}
+@keyframes fillLine { to { width: 100%; } }
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── SCROLL PROGRESS ── */
+#progress {
+  position: fixed; top: 0; right: 0; width: 0%;
+  height: 2px; background: var(--accent);
+  z-index: 1000; transition: width 0.1s linear;
+}
+
+/* ── HEADER ── */
+.header {
+  position: fixed; top: 0; width: 100%;
+  background: rgba(245,242,235,0.92);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  z-index: 100; padding: 0 48px;
+  transition: var(--transition);
+}
+.header.scrolled {
+  padding: 0 48px;
+  box-shadow: 0 1px 40px rgba(0,0,0,0.08);
+}
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 68px; gap: 32px;
+}
+.logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--ink);
+}
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+.logo-mark i { color: var(--paper); font-size: 14px; }
+.logo-text {
+  font-family: var(--font-display);
+  font-weight: 800; font-size: 17px;
+  letter-spacing: -0.5px; line-height: 1;
+}
+.logo-text em { color: var(--accent); font-style: normal; }
+.nav-center {
+  display: flex; gap: 32px; align-items: center;
+}
+.nav-center a {
+  font-size: 14px; font-weight: 500;
+  color: var(--text-dim); text-decoration: none;
+  transition: color 0.3s; position: relative;
+  padding-bottom: 2px;
+}
+.nav-center a::after {
+  content: ''; position: absolute;
+  bottom: 0; right: 0; width: 0; height: 1.5px;
+  background: var(--accent); transition: width 0.3s;
+}
+.nav-center a:hover { color: var(--ink); }
+.nav-center a:hover::after { width: 100%; }
+.nav-cta {
+  background: var(--ink); color: var(--paper) !important;
+  padding: 10px 22px; font-size: 13px !important;
+  font-weight: 700 !important; letter-spacing: 0.5px;
+  border-radius: 2px; transition: var(--transition) !important;
+}
+.nav-cta:hover { background: var(--accent) !important; transform: translateY(-2px); }
+.nav-cta::after { display: none !important; }
+.hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  cursor: pointer; padding: 4px;
+}
+.hamburger span {
+  width: 24px; height: 1.5px; background: var(--ink);
+  transition: var(--transition);
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--ink);
+  display: grid; grid-template-columns: 1fr 1fr;
+  overflow: hidden; padding-top: 68px;
+  position: relative;
+}
+.hero-bg-pattern {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      0deg, transparent, transparent 79px,
+      rgba(255,255,255,0.02) 79px, rgba(255,255,255,0.02) 80px
+    ),
+    repeating-linear-gradient(
+      90deg, transparent, transparent 79px,
+      rgba(255,255,255,0.02) 79px, rgba(255,255,255,0.02) 80px
+    );
+  pointer-events: none;
+}
+.hero-left {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 80px 80px 80px;
+  position: relative; z-index: 2;
+  animation: fadeUp 1s ease 0.5s both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--accent); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 32px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 32px; height: 1px; background: var(--accent);
+}
+.hero-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 6vw, 88px);
+  font-weight: 800; color: var(--paper);
+  line-height: 0.95; letter-spacing: -3px;
+  margin-bottom: 32px;
+}
+.hero-h1 .accent-line {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent);
+}
+.hero-h1 .highlight {
+  position: relative; display: inline-block;
+}
+.hero-h1 .highlight::after {
+  content: '';
+  position: absolute; bottom: 6px; right: 0; left: 0;
+  height: 6px; background: var(--accent); opacity: 0.4;
+  z-index: -1;
+}
+.hero-desc {
+  font-size: 17px; color: rgba(245,242,235,0.55);
+  line-height: 1.9; max-width: 440px; margin-bottom: 48px;
+  font-weight: 300;
+}
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 64px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--accent); color: var(--paper);
+  padding: 15px 32px; font-size: 15px; font-weight: 700;
+  border: none; cursor: pointer; text-decoration: none;
+  font-family: var(--font-body); border-radius: 2px;
+  transition: var(--transition); position: relative; overflow: hidden;
+}
+.btn-primary::before {
+  content: ''; position: absolute; inset: 0;
+  background: var(--paper); transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s ease; z-index: 0;
+}
+.btn-primary:hover::before { transform: scaleX(1); }
+.btn-primary:hover { color: var(--ink); transform: translateY(-3px); }
+.btn-primary > * { position: relative; z-index: 1; }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent; color: rgba(245,242,235,0.6);
+  padding: 14px 32px; font-size: 15px; font-weight: 600;
+  border: 1px solid rgba(245,242,235,0.15); cursor: pointer;
+  text-decoration: none; font-family: var(--font-body);
+  border-radius: 2px; transition: var(--transition);
+}
+.btn-ghost:hover {
+  border-color: rgba(245,242,235,0.4);
+  color: var(--paper); transform: translateY(-3px);
+}
+.hero-trust {
+  display: flex; align-items: center; gap: 20px;
+  padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08);
+}
+.trust-faces { display: flex; }
+.trust-faces img {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid var(--ink); object-fit: cover;
+  margin-left: -8px;
+}
+.trust-info { font-size: 13px; color: rgba(245,242,235,0.45); font-weight: 300; }
+.trust-info strong { color: var(--accent); font-weight: 700; }
+
+/* HERO RIGHT */
+.hero-right {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #1a1510 0%, #0f0c08 100%);
+  animation: fadeUp 1s ease 0.7s both;
+}
+.hero-img-container {
+  position: relative; height: 100%;
+  display: flex; align-items: flex-end;
+}
+.hero-img-container img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: top;
+  opacity: 0.7; mix-blend-mode: luminosity;
+  display: block;
+}
+.hero-img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, #0a0a08 0%, transparent 30%, transparent 70%, #0a0a08 100%),
+              linear-gradient(to top, #0a0a08 0%, transparent 30%);
+}
+.hero-stat-cards {
+  position: absolute; bottom: 40px; left: 32px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.stat-pill {
+  background: rgba(245,242,235,0.06);
+  border: 1px solid rgba(245,242,235,0.1);
+  backdrop-filter: blur(20px);
+  padding: 14px 20px; border-radius: 4px;
+  display: flex; align-items: center; gap: 14px;
+}
+.stat-pill-num {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 800;
+  color: var(--accent); line-height: 1;
+}
+.stat-pill-label {
+  font-size: 12px; color: rgba(245,242,235,0.5);
+  line-height: 1.4;
+}
+.hero-cert-badge {
+  position: absolute; top: 40px; left: 32px;
+  background: var(--accent);
+  padding: 10px 18px; border-radius: 2px;
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--paper); letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+/* ── MARQUEE ── */
+.marquee-section {
+  background: var(--accent); overflow: hidden; padding: 14px 0;
+}
+.marquee-track {
+  display: flex; gap: 0;
+  animation: marquee 20s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 0 40px; white-space: nowrap;
+  font-family: var(--font-display); font-size: 15px;
+  font-weight: 700; color: var(--paper); letter-spacing: 0.5px;
+}
+.marquee-sep { opacity: 0.4; font-size: 20px; }
+.marquee-num { font-size: 22px; }
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ── SECTION COMMONS ── */
+.section { padding: 120px 0; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 16px;
+}
+.section-label::before {
+  content: ''; width: 20px; height: 1px; background: var(--accent);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 800; letter-spacing: -2px;
+  line-height: 1; color: var(--ink); margin-bottom: 16px;
+}
+.section-subtitle {
+  font-size: 17px; color: var(--text-dim);
+  line-height: 1.85; max-width: 580px; font-weight: 400;
+}
+
+/* ── FEATURES SECTION ── */
+.features-section { background: var(--cream); }
+.features-header {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: end; margin-bottom: 80px;
+}
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border);
+}
+.feat-card {
+  background: var(--cream);
+  padding: 44px 36px;
+  transition: var(--transition); position: relative;
+  overflow: hidden;
+}
+.feat-card::before {
+  content: ''; position: absolute;
+  bottom: 0; right: 0; width: 0; height: 2px;
+  background: var(--accent); transition: width 0.5s ease;
+}
+.feat-card:hover::before { width: 100%; }
+.feat-card:hover { background: var(--paper); }
+.feat-number {
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--text-faint); letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+.feat-icon-wrap {
+  width: 52px; height: 52px;
+  border: 1px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--ink); margin-bottom: 20px;
+  transition: var(--transition);
+}
+.feat-card:hover .feat-icon-wrap {
+  background: var(--ink); color: var(--paper);
+  border-color: var(--ink);
+}
+.feat-card h3 {
+  font-family: var(--font-display); font-size: 18px;
+  font-weight: 700; color: var(--ink); margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.feat-card p { font-size: 14px; color: var(--text-dim); line-height: 1.75; }
+
+/* ── PROGRAMS ── */
+.programs-section { background: var(--ink); }
+.programs-section .section-title { color: var(--paper); }
+.programs-section .section-subtitle { color: rgba(245,242,235,0.45); }
+.programs-section .section-label { color: var(--accent); }
+.programs-header { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 64px; }
+.programs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.prog-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px; overflow: hidden;
+  transition: var(--transition); display: flex; flex-direction: column;
+}
+.prog-card:hover {
+  border-color: rgba(200,65,10,0.4);
+  transform: translateY(-8px);
+  box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+}
+.prog-card.featured { border-color: rgba(200,65,10,0.3); }
+.prog-img-wrap { position: relative; height: 220px; overflow: hidden; }
+.prog-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; transition: transform 0.6s ease;
+  filter: grayscale(0.3);
+}
+.prog-card:hover .prog-img-wrap img { transform: scale(1.06); filter: grayscale(0); }
+.prog-img-tint {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(10,10,8,0.9) 0%, transparent 60%);
+}
+.prog-badge {
+  position: absolute; top: 16px; right: 16px;
+  background: var(--accent); color: var(--paper);
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 1.5px; padding: 5px 12px; border-radius: 2px;
+  font-weight: 700;
+}
+.prog-body { padding: 28px 24px; flex-grow: 1; }
+.prog-body h3 {
+  font-family: var(--font-display); font-size: 20px;
+  font-weight: 700; color: var(--paper); margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.prog-body p { font-size: 14px; color: rgba(245,242,235,0.45); margin-bottom: 20px; line-height: 1.7; }
+.prog-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.prog-list li {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: rgba(245,242,235,0.65);
+}
+.prog-list li::before {
+  content: '—'; color: var(--accent); font-size: 12px; flex-shrink: 0;
+}
+.prog-footer {
+  padding: 20px 24px 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.prog-price {
+  font-family: var(--font-display); font-size: 40px;
+  font-weight: 800; color: var(--paper); letter-spacing: -1px; line-height: 1;
+}
+.prog-price-sub { font-size: 13px; color: rgba(245,242,235,0.35); margin-top: 2px; }
+.btn-prog {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: var(--paper);
+  padding: 11px 20px; font-size: 13px; font-weight: 700;
+  border: none; cursor: pointer; text-decoration: none;
+  font-family: var(--font-body); border-radius: 2px;
+  transition: var(--transition);
+}
+.btn-prog:hover { background: var(--accent-warm); transform: translateY(-2px); }
+
+/* ── ABOUT ── */
+.about-section { background: var(--paper); overflow: hidden; }
+.about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.about-visual { position: relative; }
+.about-img-frame {
+  position: relative; border-radius: 4px; overflow: hidden;
+  height: 600px;
+}
+.about-img-frame img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top;
+  display: block;
+}
+.about-img-frame::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, rgba(10,10,8,0.4) 100%);
+  pointer-events: none;
+}
+.about-accent-box {
+  position: absolute; bottom: -20px; right: -20px;
+  background: var(--accent);
+  padding: 28px 32px; border-radius: 4px;
+  min-width: 180px;
+}
+.aab-num {
+  font-family: var(--font-display); font-size: 56px;
+  font-weight: 800; color: var(--paper); line-height: 1;
+  letter-spacing: -2px;
+}
+.aab-label { font-size: 13px; color: rgba(245,242,235,0.7); margin-top: 4px; }
+.about-content {}
+.about-content .section-title { margin-bottom: 24px; }
+.about-bio { font-size: 17px; color: var(--text-dim); line-height: 1.9; margin-bottom: 40px; font-weight: 300; }
+.about-skills { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
+.skill-item {}
+.skill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.skill-name { font-size: 14px; font-weight: 600; color: var(--ink); }
+.skill-pct { font-family: var(--font-mono); font-size: 12px; color: var(--text-faint); }
+.skill-track {
+  height: 2px; background: var(--border);
+  position: relative; border-radius: 1px;
+}
+.skill-fill {
+  position: absolute; top: 0; right: 0;
+  height: 100%; background: var(--ink); border-radius: 1px;
+  width: 0; transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.certs-strip {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-top: 32px;
+}
+.cert-badge {
+  border: 1px solid var(--border);
+  padding: 14px 12px; text-align: center;
+  border-radius: 2px; transition: var(--transition);
+}
+.cert-badge:hover { border-color: var(--accent); background: var(--cream); }
+.cert-badge .cert-name { font-family: var(--font-mono); font-size: 11px; font-weight: 700; color: var(--ink); letter-spacing: 0.5px; }
+.cert-badge .cert-sub { font-size: 11px; color: var(--text-faint); margin-top: 3px; }
+
+/* ── SESSIONS ── */
+.sessions-section { background: var(--forest); }
+.sessions-section .section-title { color: var(--paper); }
+.sessions-section .section-subtitle { color: rgba(245,242,235,0.45); }
+.sessions-section .section-label { color: #7dc494; }
+.sessions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 60px; }
+.sess-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 36px 28px; border-radius: 4px;
+  transition: var(--transition);
+}
+.sess-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(125,196,148,0.3);
+  transform: translateY(-6px);
+}
+.sess-live {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 1.5px; color: #7dc494; margin-bottom: 24px;
+}
+.live-dot {
+  width: 6px; height: 6px; background: #7dc494; border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.sess-icon {
+  font-size: 32px; margin-bottom: 20px;
+  display: block;
+}
+.sess-card h3 {
+  font-family: var(--font-display); font-size: 20px;
+  font-weight: 700; color: var(--paper); margin-bottom: 10px;
+  letter-spacing: -0.3px;
+}
+.sess-card p { font-size: 14px; color: rgba(245,242,235,0.45); line-height: 1.7; margin-bottom: 20px; }
+.sess-time {
+  font-family: var(--font-mono); font-size: 12px;
+  color: #7dc494; letter-spacing: 1px;
+}
+
+/* ── PRICING ── */
+.pricing-section { background: var(--cream); }
+.pricing-header { text-align: center; margin-bottom: 64px; }
+.pricing-header .section-subtitle { margin: 0 auto; }
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1100px; margin: 0 auto; }
+.price-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  padding: 40px 36px; border-radius: 4px;
+  transition: var(--transition); position: relative;
+}
+.price-card:hover { transform: translateY(-8px); box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
+.price-card.popular {
+  background: var(--ink);
+  border-color: var(--ink);
+  transform: scale(1.04);
+}
+.price-card.popular:hover { transform: scale(1.04) translateY(-8px); }
+.popular-tag {
+  position: absolute; top: -1px; right: 50%; transform: translateX(50%);
+  background: var(--accent); color: var(--paper);
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 1.5px; padding: 5px 16px; border-radius: 0 0 4px 4px;
+}
+.price-tier {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-faint); margin-bottom: 8px;
+}
+.price-card.popular .price-tier { color: rgba(245,242,235,0.4); }
+.price-card-title {
+  font-family: var(--font-display); font-size: 22px;
+  font-weight: 700; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.5px;
+}
+.price-card.popular .price-card-title { color: var(--paper); }
+.price-card-desc { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 28px; }
+.price-card.popular .price-card-desc { color: rgba(245,242,235,0.45); }
+.price-divider { height: 1px; background: var(--border); margin-bottom: 28px; }
+.price-card.popular .price-divider { background: rgba(255,255,255,0.08); }
+.price-amount { margin-bottom: 6px; display: flex; align-items: baseline; gap: 4px; }
+.price-currency { font-size: 22px; font-weight: 700; color: var(--ink); }
+.price-card.popular .price-currency { color: var(--paper); }
+.price-val {
+  font-family: var(--font-display); font-size: 64px;
+  font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -3px;
+}
+.price-card.popular .price-val { color: var(--paper); }
+.price-period { font-size: 14px; color: var(--text-faint); padding-bottom: 10px; }
+.price-card.popular .price-period { color: rgba(245,242,235,0.35); }
+.price-feats { list-style: none; display: flex; flex-direction: column; gap: 12px; margin: 28px 0 32px; }
+.price-feats li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--text-dim); line-height: 1.5;
+}
+.price-card.popular .price-feats li { color: rgba(245,242,235,0.6); }
+.price-feats li.yes::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+.price-feats li.no::before { content: '—'; color: var(--border-strong); flex-shrink: 0; }
+.price-feats li.no { opacity: 0.4; }
+.btn-price {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px; font-size: 15px; font-weight: 700;
+  border: none; cursor: pointer; font-family: var(--font-body);
+  border-radius: 2px; transition: var(--transition); text-decoration: none;
+}
+.btn-price-dark { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); }
+.btn-price-dark:hover { background: var(--accent); border-color: var(--accent); }
+.btn-price-accent { background: var(--accent); color: var(--paper); }
+.btn-price-accent:hover { background: var(--accent-warm); transform: translateY(-2px); }
+.btn-price-outline { background: transparent; color: var(--paper); border: 1px solid rgba(255,255,255,0.2); }
+.btn-price-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── TESTIMONIALS ── */
+.testimonials-section { background: var(--paper); }
+.testis-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; }
+.testis-left { position: sticky; top: 100px; }
+.testis-left .section-title { margin-bottom: 20px; }
+.testis-left .section-subtitle { margin-bottom: 36px; }
+.rating-block { display: flex; align-items: center; gap: 16px; }
+.rating-num {
+  font-family: var(--font-display); font-size: 64px;
+  font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -3px;
+}
+.stars { display: flex; gap: 3px; margin-bottom: 4px; }
+.stars i { color: var(--gold); font-size: 14px; }
+.rating-sub { font-size: 12px; color: var(--text-faint); }
+.testis-grid { display: flex; flex-direction: column; gap: 20px; }
+.testi-card {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  padding: 32px; border-radius: 4px;
+  transition: var(--transition);
+}
+.testi-card:hover { border-color: var(--accent); background: var(--paper); }
+.testi-quote {
+  font-size: 32px; color: var(--accent); line-height: 1;
+  font-family: Georgia, serif; margin-bottom: 16px;
+}
+.testi-text { font-size: 15px; color: var(--text-dim); line-height: 1.8; margin-bottom: 24px; }
+.testi-author { display: flex; align-items: center; gap: 14px; }
+.testi-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  object-fit: cover; border: 2px solid var(--border);
+}
+.testi-name { font-weight: 700; font-size: 15px; color: var(--ink); }
+.testi-result { font-size: 12px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+
+/* ── GALLERY ── */
+.gallery-section { background: var(--ink); padding: 100px 0; }
+.gallery-section .section-title { color: var(--paper); }
+.gallery-section .section-label { color: var(--accent); }
+.gallery-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
+.gallery-mosaic {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 280px 280px;
+  gap: 12px;
+}
+.gallery-item {
+  position: relative; overflow: hidden; border-radius: 4px; cursor: pointer;
+}
+.gallery-item:nth-child(1) { grid-row: span 2; }
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.6s ease; display: block;
+  filter: grayscale(0.2);
+}
+.gallery-item:hover img { transform: scale(1.06); filter: grayscale(0); }
+.gallery-caption {
+  position: absolute; bottom: 0; right: 0; left: 0;
+  padding: 24px 20px 20px;
+  background: linear-gradient(to top, rgba(10,10,8,0.9) 0%, transparent 100%);
+  opacity: 0; transition: opacity 0.4s;
+}
+.gallery-item:hover .gallery-caption { opacity: 1; }
+.gc-tag {
+  display: inline-block; background: var(--accent);
+  color: var(--paper); font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 1.5px;
+  padding: 4px 10px; border-radius: 2px; margin-bottom: 6px;
+}
+.gc-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--paper); }
+
+/* ── ONLINE COACHING ── */
+.online-section { background: var(--cream); }
+.online-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.online-content .section-title { margin-bottom: 20px; }
+.online-content .section-subtitle { margin-bottom: 36px; }
+.online-feats { display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+.online-feat {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 18px;
+  background: var(--paper);
+  border: 1px solid var(--border); border-radius: 2px;
+  transition: var(--transition);
+}
+.online-feat:hover { border-color: var(--accent); transform: translateX(-4px); }
+.online-feat-icon {
+  width: 36px; height: 36px;
+  background: var(--ink); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; border-radius: 2px; flex-shrink: 0;
+}
+.online-feat-text { font-size: 14px; font-weight: 600; color: var(--ink); }
+.online-offer-card {
+  background: var(--ink); border-radius: 4px;
+  padding: 48px 40px; position: relative; overflow: hidden;
+}
+.online-offer-card::before {
+  content: ''; position: absolute;
+  top: -60px; left: -60px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(200,65,10,0.15) 0%, transparent 70%);
+}
+.offer-label {
+  font-family: var(--font-mono); font-size: 11px;
+  color: rgba(245,242,235,0.35); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.offer-price {
+  font-family: var(--font-display); font-size: 88px;
+  font-weight: 800; color: var(--paper); line-height: 1;
+  letter-spacing: -4px; margin-bottom: 4px;
+}
+.offer-price span { font-size: 36px; vertical-align: super; letter-spacing: -1px; }
+.offer-period { font-size: 15px; color: rgba(245,242,235,0.4); margin-bottom: 32px; }
+.offer-cta {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--accent); color: var(--paper);
+  padding: 18px; font-size: 16px; font-weight: 800;
+  border: none; cursor: pointer; font-family: var(--font-body);
+  border-radius: 2px; transition: var(--transition); text-decoration: none;
+  margin-bottom: 20px;
+}
+.offer-cta:hover { background: var(--accent-warm); transform: translateY(-3px); }
+.offer-guarantee {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: rgba(245,242,235,0.4);
+}
+.offer-guarantee i { color: #7dc494; }
+
+/* ── FAQ ── */
+.faq-section { background: var(--paper); }
+.faq-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 0; cursor: pointer;
+  font-weight: 600; font-size: 16px; color: var(--ink);
+  transition: color 0.3s; gap: 16px;
+  user-select: none;
+}
+.faq-q:hover { color: var(--accent); }
+.faq-item.open .faq-q { color: var(--accent); }
+.faq-arrow {
+  width: 28px; height: 28px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0; transition: transform 0.3s;
+}
+.faq-item.open .faq-arrow { transform: rotate(180deg); border-color: var(--accent); color: var(--accent); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-item.open .faq-a { max-height: 300px; }
+.faq-a p { padding: 0 0 24px; font-size: 15px; color: var(--text-dim); line-height: 1.8; }
+
+/* ── BLOG ── */
+.blog-section { background: var(--cream); }
+.blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+.blog-card {
+  background: var(--paper);
+  border: 1px solid var(--border); border-radius: 4px;
+  overflow: hidden; transition: var(--transition);
+}
+.blog-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+.blog-img-wrap { height: 200px; overflow: hidden; }
+.blog-img-wrap img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.5s; display: block;
+}
+.blog-card:hover .blog-img-wrap img { transform: scale(1.05); }
+.blog-body { padding: 24px; }
+.blog-cat {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 10px;
+  letter-spacing: 1.5px; color: var(--accent);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.blog-title {
+  font-family: var(--font-display); font-size: 17px;
+  font-weight: 700; color: var(--ink); margin-bottom: 10px;
+  line-height: 1.3; letter-spacing: -0.3px;
+}
+.blog-excerpt { font-size: 13px; color: var(--text-dim); line-height: 1.7; margin-bottom: 16px; }
+.blog-meta { display: flex; gap: 16px; font-size: 12px; color: var(--text-faint); }
+.blog-meta span { display: flex; align-items: center; gap: 4px; }
+
+/* ── CONTACT ── */
+.contact-section { background: var(--ink); }
+.contact-section .section-label { color: var(--accent); }
+.contact-section .section-title { color: var(--paper); }
+.contact-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; margin-top: 64px; }
+.contact-info-side {}
+.contact-intro { font-size: 16px; color: rgba(245,242,235,0.45); line-height: 1.9; margin-bottom: 40px; }
+.contact-channels { display: flex; flex-direction: column; gap: 12px; }
+.ch-link {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 2px; text-decoration: none;
+  transition: var(--transition);
+}
+.ch-link:hover { border-color: rgba(200,65,10,0.3); background: rgba(200,65,10,0.06); }
+.ch-icon {
+  width: 40px; height: 40px;
+  background: var(--accent); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; border-radius: 2px; flex-shrink: 0;
+}
+.ch-label { font-size: 11px; color: rgba(245,242,235,0.35); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.ch-val { font-size: 15px; color: var(--paper); font-weight: 600; }
+.contact-form-wrap {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 48px 40px; border-radius: 4px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { margin-bottom: 20px; }
+.form-group label {
+  display: block; margin-bottom: 8px;
+  font-size: 12px; font-weight: 700;
+  color: rgba(245,242,235,0.45); letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%; padding: 14px 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  color: var(--paper); font-size: 15px;
+  border-radius: 2px; transition: border-color 0.3s;
+  font-family: var(--font-body); outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: rgba(200,65,10,0.5);
+  background: rgba(200,65,10,0.04);
+}
+.form-group select option { background: #1a1a14; }
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(245,242,235,0.25); }
+.btn-submit {
+  width: 100%; padding: 17px; font-size: 16px; font-weight: 800;
+  background: var(--accent); color: var(--paper); border: none;
+  cursor: pointer; font-family: var(--font-body); border-radius: 2px;
+  transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-submit:hover { background: var(--accent-warm); transform: translateY(-2px); }
+
+/* ── CTA BANNER ── */
+.cta-banner {
+  background: var(--accent);
+  padding: 100px 0; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-banner::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px,
+    transparent 1px, transparent 50px
+  );
+}
+.cta-banner h2 {
+  font-family: var(--font-display); font-size: clamp(44px, 7vw, 80px);
+  font-weight: 800; color: var(--paper); letter-spacing: -3px;
+  margin-bottom: 16px; position: relative;
+}
+.cta-banner p { font-size: 18px; color: rgba(245,242,235,0.75); margin-bottom: 40px; position: relative; }
+.btn-cta-white {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--paper); color: var(--accent);
+  padding: 18px 48px; font-size: 17px; font-weight: 900;
+  border: none; cursor: pointer; font-family: var(--font-body);
+  border-radius: 2px; transition: var(--transition); text-decoration: none;
+  position: relative;
+}
+.btn-cta-white:hover { background: var(--ink); color: var(--paper); transform: translateY(-4px); }
+
+/* ── FOOTER ── */
+.footer { background: #0a0a08; padding: 80px 0 32px; }
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px; margin-bottom: 60px; }
+.footer-brand p { font-size: 14px; color: rgba(245,242,235,0.35); line-height: 1.8; margin: 20px 0 24px; }
+.footer-social { display: flex; gap: 8px; }
+.footer-social a {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(245,242,235,0.4); font-size: 14px; text-decoration: none;
+  border-radius: 2px; transition: var(--transition);
+}
+.footer-social a:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.footer-col h4 { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--paper); margin-bottom: 20px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  color: rgba(245,242,235,0.35); font-size: 14px;
+  text-decoration: none; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--accent); }
+.newsletter-input-wrap { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.newsletter-input {
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--paper); font-size: 14px; border-radius: 2px;
+  font-family: var(--font-body); outline: none;
+}
+.newsletter-input:focus { border-color: rgba(200,65,10,0.4); }
+.newsletter-input::placeholder { color: rgba(245,242,235,0.25); }
+.btn-newsletter {
+  padding: 12px; background: var(--accent); color: var(--paper);
+  border: none; font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: var(--font-body); border-radius: 2px;
+  transition: background 0.3s;
+}
+.btn-newsletter:hover { background: var(--accent-warm); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-bottom p { font-size: 13px; color: rgba(245,242,235,0.25); }
+.footer-bottom a { color: var(--accent); text-decoration: none; }
+
+/* ── SCROLL TOP ── */
+.scroll-top {
+  position: fixed; bottom: 28px; left: 28px;
+  width: 44px; height: 44px;
+  background: var(--ink); color: var(--paper);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer; border-radius: 2px;
+  opacity: 0; transform: translateY(10px); pointer-events: none;
+  transition: var(--transition); z-index: 90;
+}
+.scroll-top.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+.scroll-top:hover { background: var(--accent); border-color: var(--accent); }
+
+/* WA FLOAT */
+.wa-float {
+  position: fixed; bottom: 28px; right: 28px;
+  width: 52px; height: 52px;
+  background: #25d366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; border-radius: 50%; text-decoration: none;
+  box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+  z-index: 90; transition: var(--transition);
+  animation: waPulse 3s infinite;
+}
+.wa-float:hover { transform: scale(1.1); }
+@keyframes waPulse {
+  0%,100%{box-shadow:0 8px 24px rgba(37,211,102,0.4);}
+  50%{box-shadow:0 8px 36px rgba(37,211,102,0.6);}
+}
+
+/* ── CALCULATOR ── */
+.calc-section { background: var(--paper); }
+.calc-tabs {
+  display: inline-flex; background: var(--cream);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 4px; gap: 4px; margin-bottom: 40px;
+}
+.ctab {
+  padding: 10px 24px; font-size: 13px; font-weight: 700;
+  border: none; cursor: pointer; border-radius: 2px;
+  font-family: var(--font-body); transition: var(--transition);
+  background: transparent; color: var(--text-dim);
+}
+.ctab.active { background: var(--ink); color: var(--paper); }
+.calc-panel { display: none; }
+.calc-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.calc-inputs {
+  background: var(--cream); border: 1px solid var(--border);
+  padding: 32px; border-radius: 4px;
+}
+.calc-inputs h3 { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 24px; color: var(--ink); }
+.calc-field { margin-bottom: 16px; }
+.calc-field label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+.calc-field input, .calc-field select {
+  width: 100%; padding: 12px 14px;
+  background: var(--paper); border: 1px solid var(--border);
+  font-size: 14px; font-family: var(--font-body);
+  color: var(--ink); border-radius: 2px; outline: none; transition: border-color 0.3s;
+}
+.calc-field input:focus, .calc-field select:focus { border-color: var(--accent); }
+.gender-btns { display: flex; gap: 8px; }
+.gbtn {
+  flex: 1; padding: 10px; border-radius: 2px;
+  border: 1px solid var(--border); background: var(--paper);
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: var(--font-body); color: var(--text-dim);
+  transition: var(--transition);
+}
+.gbtn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn-calc {
+  width: 100%; padding: 13px; background: var(--ink); color: var(--paper);
+  border: none; font-size: 14px; font-weight: 800;
+  cursor: pointer; font-family: var(--font-body);
+  border-radius: 2px; transition: background 0.3s; margin-top: 8px;
+}
+.btn-calc:hover { background: var(--accent); }
+.calc-result {
+  background: var(--cream); border: 1px solid var(--border);
+  padding: 32px; border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; min-height: 320px;
+}
+.calc-placeholder { text-align: center; color: var(--text-faint); }
+.calc-placeholder i { font-size: 40px; margin-bottom: 12px; display: block; opacity: 0.4; }
+
+/* ── AOS ── */
+.aos { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.aos.animated { opacity: 1; transform: translateY(0); }
+.aos[data-d="1"] { transition-delay: 0.1s; }
+.aos[data-d="2"] { transition-delay: 0.2s; }
+.aos[data-d="3"] { transition-delay: 0.3s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 80px 48px; }
+  .features-header, .programs-header { grid-template-columns: 1fr; gap: 24px; }
+  .about-layout { grid-template-columns: 1fr; }
+  .about-visual { display: none; }
+  .online-layout { grid-template-columns: 1fr; }
+  .testis-layout { grid-template-columns: 1fr; }
+  .testis-left { position: static; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+@media (max-width: 900px) {
+  .programs-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .price-card.popular { transform: scale(1); }
+  .contact-layout { grid-template-columns: 1fr; }
+  .gallery-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .gallery-item:nth-child(1) { grid-row: auto; }
+  .sessions-grid { grid-template-columns: 1fr 1fr; }
+  .faq-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .container { padding: 0 24px; }
+  .header { padding: 0 24px; }
+  .nav-center { display: none; position: fixed; top: 68px; right: -100%; width: 80%; height: calc(100vh - 68px); background: var(--paper); border-left: 1px solid var(--border); flex-direction: column; padding: 40px 32px; align-items: flex-start; transition: right 0.4s ease; gap: 0; z-index: 99; }
+  .nav-center.open { right: 0; display: flex; }
+  .nav-center a { font-size: 18px; padding: 14px 0; border-bottom: 1px solid var(--border); width: 100%; }
+  .nav-cta { margin-top: 20px; width: 100%; justify-content: center; }
+  .hamburger { display: flex; }
+  .hero-left { padding: 60px 24px; }
+  .section { padding: 80px 0; }
+  .features-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .sessions-grid { grid-template-columns: 1fr; }
+  .gallery-mosaic { grid-template-columns: 1fr; }
+  .calc-panel.active { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .certs-strip { grid-template-columns: repeat(2, 1fr); }
+  .hero-actions .btn-primary, .hero-actions .btn-ghost { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<!-- PRELOADER -->
+<div id="preloader">
+  <div class="pre-word">
+    <span>COACH</span><span> AHMED</span><span> GAMAL</span>
+  </div>
+  <div class="pre-line"></div>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="nav">
+    <a href="#home" class="logo">
+      <div class="logo-mark"><i class="fas fa-dumbbell"></i></div>
+      <div class="logo-text">COACH <em>AHMED</em></div>
+    </a>
+    <nav class="nav-center" id="navLinks">
+      <a href="#features">المميزات</a>
+      <a href="#programs">البرامج</a>
+      <a href="#about">عن الكوتش</a>
+      <a href="#pricing">الباقات</a>
+      <a href="#testimonials">التقييمات</a>
+      <a href="#calculator">الحاسبة</a>
+      <a href="#contact" class="nav-cta">احجز استشارة ←</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">كوتش معتمد دولياً — خبرة +10 سنوات</div>
+    <h1 class="hero-h1">
+      TRANSFORM<br>
+      <span class="accent-line">YOUR</span><br>
+      <span class="highlight">BODY</span>
+    </h1>
+    <p class="hero-desc">مش مجرد برنامج تدريب — نظام متكامل مبني على علم حقيقي وخبرة عملية مع مئات العملاء. هنوصل لأفضل نسخة منك بطريقة مضمونة.</p>
+    <div class="hero-actions">
+      <a href="#programs" class="btn-primary">
+        <i class="fas fa-rocket"></i>
+        <span>ابدأ رحلتك</span>
+      </a>
+      <a href="#contact" class="btn-ghost">
+        <i class="fas fa-calendar"></i>
+        <span>استشارة مجانية</span>
+      </a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-faces">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="">
+        <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?w=80&q=80" alt="">
+      </div>
+      <div class="trust-info">انضم لـ <strong>+500 عميل</strong> حققوا أهدافهم</div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-container">
+      <img src="/5406581570845478895.jpg" alt="Coach Ahmed Gamal" onerror="this.style.background='#1a1510'; this.style.opacity='0.3'">
+      <div class="hero-img-overlay"></div>
+    </div>
+    <div class="hero-cert-badge">NASM · ISSA · ACE · NSCA</div>
+    <div class="hero-stat-cards">
+      <div class="stat-pill">
+        <div class="stat-pill-num">98%</div>
+        <div class="stat-pill-label">نسبة نجاح<br>العملاء</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-num">500+</div>
+        <div class="stat-pill-label">عميل راضٍ<br>حول العالم</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="marquee-num">500+</span> عميل راضٍ <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">10</span> سنوات خبرة <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">98%</span> نسبة النجاح <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">2000+</span> ساعة تدريب <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">4</span> شهادات دولية <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">50+</span> برنامج تدريبي <span class="marquee-sep">✦</span></div>
+    <!-- duplicate -->
+    <div class="marquee-item"><span class="marquee-num">500+</span> عميل راضٍ <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">10</span> سنوات خبرة <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">98%</span> نسبة النجاح <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">2000+</span> ساعة تدريب <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">4</span> شهادات دولية <span class="marquee-sep">✦</span></div>
+    <div class="marquee-item"><span class="marquee-num">50+</span> برنامج تدريبي <span class="marquee-sep">✦</span></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features" class="section features-section">
+  <div class="container">
+    <div class="features-header">
+      <div>
+        <span class="section-label">لماذا نختلف</span>
+        <h2 class="section-title">لماذا<br>تختارنا؟</h2>
+      </div>
+      <p class="section-subtitle">كل برنامج مصمم بعناية ليناسب مستواك ووقتك وأهدافك — بدون عشوائية وبدون وعود فارغة.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card aos">
+        <div class="feat-number">/ 01</div>
+        <div class="feat-icon-wrap"><i class="fas fa-chart-line"></i></div>
+        <h3>نتائج مضمونة</h3>
+        <p>أنظمة مبنية على علم حقيقي اختُبرت على مئات العملاء مع نتائج موثقة وقابلة للقياس.</p>
+      </div>
+      <div class="feat-card aos" data-d="1">
+        <div class="feat-number">/ 02</div>
+        <div class="feat-icon-wrap"><i class="fas fa-clock"></i></div>
+        <h3>احترام وقتك</h3>
+        <p>خطط واضحة بدون تمارين غير ضرورية. أدنى وقت، أقصى نتائج — لأصحاب الجداول المزدحمة.</p>
+      </div>
+      <div class="feat-card aos" data-d="2">
+        <div class="feat-number">/ 03</div>
+        <div class="feat-icon-wrap"><i class="fas fa-fire"></i></div>
+        <h3>لكل المستويات</h3>
+        <p>مبتدئ أو محترف، عندنا نظام مناسب ليك مع خطط تدريجية للتطور المستمر.</p>
+      </div>
+      <div class="feat-card aos" data-d="1">
+        <div class="feat-number">/ 04</div>
+        <div class="feat-icon-wrap"><i class="fas fa-download"></i></div>
+        <h3>تسليم فوري</h3>
+        <p>استلم برنامجك فور الشراء مع دليل استخدام مفصل وفيديوهات شرح تفصيلية.</p>
+      </div>
+      <div class="feat-card aos" data-d="2">
+        <div class="feat-number">/ 05</div>
+        <div class="feat-icon-wrap"><i class="fas fa-user-check"></i></div>
+        <h3>متابعة شخصية</h3>
+        <p>تواصل مباشر مع الكوتش وتعديلات مستمرة على البرنامج حسب تقدمك الفعلي.</p>
+      </div>
+      <div class="feat-card aos" data-d="3">
+        <div class="feat-number">/ 06</div>
+        <div class="feat-icon-wrap"><i class="fas fa-shield-alt"></i></div>
+        <h3>ضمان الاسترداد</h3>
+        <p>ضمان استرداد أموالك خلال 7 أيام بلا أسئلة. ثقتنا بنتائجنا هي ضماننا.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs" class="section programs-section">
+  <div class="container">
+    <div class="programs-header">
+      <div>
+        <span class="section-label" style="color:var(--accent);">البرامج التدريبية</span>
+        <h2 class="section-title" style="color:var(--paper);">البرامج<br>المتقدمة</h2>
+      </div>
+      <p class="section-subtitle" style="color:rgba(245,242,235,0.45);">حلول تدريبية شاملة لكل الأهداف والمستويات — اختار ما يناسبك وابدأ رحلتك اليوم.</p>
+    </div>
+    <div class="programs-grid">
+
+      <div class="prog-card featured aos">
+        <div class="prog-img-wrap">
+          <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80" alt="">
+          <div class="prog-img-tint"></div>
+          <div class="prog-badge">الأكثر طلباً</div>
+        </div>
+        <div class="prog-body">
+          <h3>تدريب من المنزل</h3>
+          <p>برامج احترافية لا تحتاج معدات. نتائج مذهلة من راحة بيتك.</p>
+          <ul class="prog-list">
+            <li>Push Pull Legs — 6 أيام</li>
+            <li>Upper / Lower Split</li>
+            <li>Full Body Workout</li>
+            <li>Calisthenics Program</li>
+            <li>Fat Loss + Muscle Building</li>
+          </ul>
+        </div>
+        <div class="prog-footer">
+          <div>
+            <div class="prog-price">$39</div>
+            <div class="prog-price-sub">دفعة واحدة</div>
+          </div>
+          <a href="#contact" class="btn-prog"><i class="fas fa-shopping-cart"></i> اشترِ</a>
+        </div>
+      </div>
+
+      <div class="prog-card aos" data-d="1">
+        <div class="prog-img-wrap">
+          <img src="https://images.unsplash.com/photo-1534367507877-0edd93bd013b?auto=format&fit=crop&w=600&q=80" alt="">
+          <div class="prog-img-tint"></div>
+        </div>
+        <div class="prog-body">
+          <h3>تدريب الجيم</h3>
+          <p>برامج مكثفة بالأوزان الحرة والمعدات لأقصى نمو عضلي وقوة.</p>
+          <ul class="prog-list">
+            <li>برنامج بناء العضلات</li>
+            <li>PPL Advanced</li>
+            <li>Power Building Program</li>
+            <li>تخطيط دوري احترافي</li>
+            <li>Deload & Recovery</li>
+          </ul>
+        </div>
+        <div class="prog-footer">
+          <div>
+            <div class="prog-price">$39</div>
+            <div class="prog-price-sub">دفعة واحدة</div>
+          </div>
+          <a href="#contact" class="btn-prog"><i class="fas fa-shopping-cart"></i> اشترِ</a>
+        </div>
+      </div>
+
+      <div class="prog-card aos" data-d="2">
+        <div class="prog-img-wrap">
+          <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80" alt="">
+          <div class="prog-img-tint"></div>
+        </div>
+        <div class="prog-body">
+          <h3>برامج التغذية</h3>
+          <p>خطط غذائية علمية مصممة خصيصاً لهدفك وجسمك واحتياجاتك.</p>
+          <ul class="prog-list">
+            <li>حساب دقيق للسعرات</li>
+            <li>خطة التخسيس الذكي</li>
+            <li>خطة زيادة الكتلة</li>
+            <li>Meal Prep Guide</li>
+            <li>وصفات صحية لذيذة</li>
+          </ul>
+        </div>
+        <div class="prog-footer">
+          <div>
+            <div class="prog-price">$49</div>
+            <div class="prog-price-sub">دفعة واحدة</div>
+          </div>
+          <a href="#contact" class="btn-prog"><i class="fas fa-shopping-cart"></i> اشترِ</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section about-section">
+  <div class="container">
+    <div class="about-layout">
+      <div class="about-visual aos">
+        <div class="about-img-frame">
+          <img src="/5406581570845478895.jpg" alt="Coach Ahmed Gamal" onerror="this.style.display='none'">
+        </div>
+        <div class="about-accent-box">
+          <div class="aab-num">10+</div>
+          <div class="aab-label">سنوات من الخبرة الميدانية</div>
+        </div>
+      </div>
+      <div class="about-content aos" data-d="2">
+        <span class="section-label">عن الكوتش</span>
+        <h2 class="section-title">أحمد جمال</h2>
+        <p class="about-bio">
+          خبير تدريب ولياقة بدنية حاصل على 4 شهادات دولية معتمدة. 10 سنوات من العمل الميداني مع مئات العملاء — مش بس نظريات، ده خبرة حقيقية ونتائج موثقة.
+          <br><br>
+          فلسفتي بسيطة: كل جسم مختلف، وكل هدف محتاج نهج مختلف. ما بؤمنش في البرامج الجاهزة للجميع — كل برنامج بصممه بعناية بناءً على احتياجاتك الفردية.
+        </p>
+        <div class="about-skills">
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">تصميم برامج التدريب</span><span class="skill-pct">97%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="97"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">التغذية الرياضية</span><span class="skill-pct">92%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="92"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">الكوتشينج والتحفيز</span><span class="skill-pct">95%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="95"></div></div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">إعادة التأهيل</span><span class="skill-pct">88%</span></div>
+            <div class="skill-track"><div class="skill-fill" data-w="88"></div></div>
+          </div>
+        </div>
+        <div class="certs-strip">
+          <div class="cert-badge"><div class="cert-name">NASM-CPT</div><div class="cert-sub">Personal Trainer</div></div>
+          <div class="cert-badge"><div class="cert-name">ISSA</div><div class="cert-sub">Nutritionist</div></div>
+          <div class="cert-badge"><div class="cert-name">ACE</div><div class="cert-sub">Fitness Coach</div></div>
+          <div class="cert-badge"><div class="cert-name">NSCA-CSCS</div><div class="cert-sub">Strength & Cond.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SESSIONS -->
+<section class="section sessions-section">
+  <div class="container">
+    <span class="section-label" style="color:#7dc494;"><span class="live-dot"></span> مباشر الآن</span>
+    <h2 class="section-title" style="color:var(--paper);">جلسات مباشرة<br>أسبوعية</h2>
+    <p class="section-subtitle" style="color:rgba(245,242,235,0.45);">شارك في جلسات تفاعلية مع الكوتش أحمد كل أسبوع</p>
+    <div class="sessions-grid">
+      <div class="sess-card aos">
+        <div class="sess-live"><span class="live-dot"></span> LIVE SESSION</div>
+        <span class="sess-icon">🎥</span>
+        <h3>تحليل الأداء</h3>
+        <p>مراجعة فيديوهات تمارينك وتصحيح الأخطاء الفنية بشكل مباشر وفوري مع الكوتش.</p>
+        <div class="sess-time">كل ثلاثاء — 8:00 مساءً</div>
+      </div>
+      <div class="sess-card aos" data-d="1">
+        <div class="sess-live"><span class="live-dot"></span> LIVE SESSION</div>
+        <span class="sess-icon">🥗</span>
+        <h3>ورشة تغذية</h3>
+        <p>نصائح عملية للتغذية وإعداد وصفات صحية وإدارة الوجبات في حياتك اليومية.</p>
+        <div class="sess-time">كل خميس — 7:00 مساءً</div>
+      </div>
+      <div class="sess-card aos" data-d="2">
+        <div class="sess-live"><span class="live-dot"></span> LIVE SESSION</div>
+        <span class="sess-icon">🧠</span>
+        <h3>دعم وتحفيز</h3>
+        <p>جلسات تحفيزية وبناء العادات الصحية للالتزام طويل المدى وتحقيق الأهداف.</p>
+        <div class="sess-time">كل أحد — 9:00 مساءً</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ONLINE COACHING -->
+<section id="online" class="section online-section">
+  <div class="container">
+    <div class="online-layout">
+      <div class="online-content aos">
+        <span class="section-label">تدريب أونلاين</span>
+        <h2 class="section-title">متابعة كاملة<br>كل يوم</h2>
+        <p class="section-subtitle" style="margin-bottom:36px;">لو هدفك تغيير حقيقي في جسمك وأسلوب حياتك — ده النظام المناسب ليك.</p>
+        <div class="online-feats">
+          <div class="online-feat"><div class="online-feat-icon"><i class="fas fa-user-edit"></i></div><div class="online-feat-text">برنامج تدريب شخصي يتغير حسب تقدمك الأسبوعي</div></div>
+          <div class="online-feat"><div class="online-feat-icon"><i class="fas fa-utensils"></i></div><div class="online-feat-text">نظام تغذية مخصص لجسمك وأهدافك وميزانيتك</div></div>
+          <div class="online-feat"><div class="online-feat-icon"><i class="fas fa-comments"></i></div><div class="online-feat-text">متابعة يومية وتصحيح أخطاء عبر الواتساب</div></div>
+          <div class="online-feat"><div class="online-feat-icon"><i class="fas fa-video"></i></div><div class="online-feat-text">اجتماعات أسبوعية عبر الزوم لتحليل تقدمك</div></div>
+          <div class="online-feat"><div class="online-feat-icon"><i class="fas fa-plane"></i></div><div class="online-feat-text">خطة طوارئ للسفر والمناسبات والإجازات</div></div>
+        </div>
+      </div>
+      <div class="aos" data-d="2">
+        <div class="online-offer-card">
+          <div class="offer-label">باقة المتابعة الكاملة</div>
+          <div class="offer-price"><span>$</span>99</div>
+          <div class="offer-period">/ شهر كامل من المتابعة المكثفة</div>
+          <a href="#contact" class="offer-cta"><i class="fas fa-crown"></i> اشترك الآن</a>
+          <div class="offer-guarantee"><i class="fas fa-shield-alt"></i> ضمان استرداد كامل خلال 14 يوم</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section testimonials-section">
+  <div class="container">
+    <div class="testis-layout">
+      <div class="testis-left aos">
+        <span class="section-label">قصص النجاح</span>
+        <h2 class="section-title">آراء<br>عملائنا</h2>
+        <p class="section-subtitle" style="margin-bottom:28px;">شوف تجارب اللي سبقوك وحققوا نتائج مذهلة.</p>
+        <div class="rating-block">
+          <div class="rating-num">4.9</div>
+          <div>
+            <div class="stars">
+              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+            </div>
+            <div class="rating-sub">متوسط تقييم العملاء</div>
+          </div>
+        </div>
+      </div>
+      <div class="testis-grid">
+        <div class="testi-card aos">
+          <div class="testi-quote">"</div>
+          <p class="testi-text">البرنامج ساعدني أخسر 20 كيلو في 3 شهور! الكوتش كان داعم طول الوقت. النظام الغذائي كان واقعي ومش قاسي، والمتابعة اليومية كانت فرق ضخم جداً.</p>
+          <div class="testi-author">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="" class="testi-avatar">
+            <div><div class="testi-name">محمد عبد الله</div><div class="testi-result">خسر 20 كيلو في 3 أشهر 🔥</div></div>
+          </div>
+        </div>
+        <div class="testi-card aos" data-d="1">
+          <div class="testi-quote">"</div>
+          <p class="testi-text">أول مرة ألاقي برنامج تدريبي منظم وفعّال زي ده. النتائج ظهرت من أول شهر! المتابعة اليومية غيرت طريقة تفكيري كلياً عن التمرين والتغذية.</p>
+          <div class="testi-author">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="" class="testi-avatar">
+            <div><div class="testi-name">أحمد خالد</div><div class="testi-result">زاد 8 كيلو عضلات في 4 أشهر 💪</div></div>
+          </div>
+        </div>
+        <div class="testi-card aos" data-d="2">
+          <div class="testi-quote">"</div>
+          <p class="testi-text">المتابعة اليومية غيرت كل حاجة. الكوتش بيقف معايا في كل خطوة. حسيت إني مش لوحدي في الرحلة، وده كان فرق كبير في التزامي ونتيجتي.</p>
+          <div class="testi-author">
+            <img src="https://images.unsplash.com/photo-1494790108755-2616b786d4d1?w=100&q=80" alt="" class="testi-avatar">
+            <div><div class="testi-name">سارة محمد</div><div class="testi-result">تحسن اللياقة 70% في 8 أسابيع ⚡</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="container">
+    <div class="gallery-header">
+      <div>
+        <span class="section-label">معرض النتائج</span>
+        <h2 class="section-title" style="color:var(--paper);">نتائج<br>حقيقية</h2>
+      </div>
+      <a href="#contact" class="btn-ghost" style="border-color:rgba(255,255,255,0.2);color:rgba(245,242,235,0.6);">شوف المزيد →</a>
+    </div>
+    <div class="gallery-mosaic">
+      <div class="gallery-item aos">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" alt="">
+        <div class="gallery-caption"><div class="gc-tag">تحول</div><div class="gc-title">خسارة 15 كيلو في 12 أسبوع</div></div>
+      </div>
+      <div class="gallery-item aos" data-d="1">
+        <img src="https://images.unsplash.com/photo-1534367507877-0edd93bd013b?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="gallery-caption"><div class="gc-tag">عضلات</div><div class="gc-title">6 كيلو عضلات نقية</div></div>
+      </div>
+      <div class="gallery-item aos" data-d="2">
+        <img src="https://images.unsplash.com/photo-1549060279-7e168fce7090?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="gallery-caption"><div class="gc-tag">لياقة</div><div class="gc-title">تحسين 60% في 8 أسابيع</div></div>
+      </div>
+      <div class="gallery-item aos" data-d="1">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="gallery-caption"><div class="gc-tag">تحول كامل</div><div class="gc-title">رحلة 6 أشهر كاملة</div></div>
+      </div>
+      <div class="gallery-item aos" data-d="2">
+        <img src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=600&q=80" alt="">
+        <div class="gallery-caption"><div class="gc-tag">قوة</div><div class="gc-title">تضاعف قوة الأداء</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="section pricing-section">
+  <div class="container">
+    <div class="pricing-header">
+      <span class="section-label" style="display:inline-flex;margin-bottom:12px;">الباقات والأسعار</span>
+      <h2 class="section-title">اختار<br>باقتك</h2>
+      <p class="section-subtitle">خطط مصممة لكل مستوى وميزانية — مع ضمان استرداد الأموال</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="price-card aos">
+        <div class="price-tier">STARTER</div>
+        <div class="price-card-title">البرامج الجاهزة</div>
+        <div class="price-card-desc">مثالي للمبتدئين الذين يريدون البدء بخطة علمية واضحة.</div>
+        <div class="price-divider"></div>
+        <div class="price-amount">
+          <span class="price-currency">$</span>
+          <span class="price-val">39</span>
+        </div>
+        <span class="price-period">/ برنامج واحد</span>
+        <ul class="price-feats">
+          <li class="yes">برنامج PDF كامل (8-12 أسبوع)</li>
+          <li class="yes">خطة غذائية أساسية</li>
+          <li class="yes">فيديوهات شرح التمارين</li>
+          <li class="yes">ضمان استرداد 7 أيام</li>
+          <li class="no">متابعة شخصية مع الكوتش</li>
+          <li class="no">جلسات فيديو مباشرة</li>
+        </ul>
+        <a href="#contact" class="btn-price btn-price-dark">ابدأ الآن</a>
+      </div>
+
+      <div class="price-card popular aos" data-d="1">
+        <div class="popular-tag">★ الأكثر طلباً</div>
+        <div class="price-tier">ELITE</div>
+        <div class="price-card-title">المتابعة الكاملة</div>
+        <div class="price-card-desc">متابعة شخصية يومية مع الكوتش لأقصى نتائج مضمونة.</div>
+        <div class="price-divider"></div>
+        <div class="price-amount">
+          <span class="price-currency">$</span>
+          <span class="price-val">149</span>
+        </div>
+        <span class="price-period">/ شهر</span>
+        <ul class="price-feats">
+          <li class="yes">برنامج 100% مخصص</li>
+          <li class="yes">خطة غذائية شاملة</li>
+          <li class="yes">متابعة يومية واتساب</li>
+          <li class="yes">جلستا فيديو شهرياً</li>
+          <li class="yes">تعديل كل أسبوعين</li>
+          <li class="yes">ضمان استرداد 14 يوم</li>
+        </ul>
+        <a href="#contact" class="btn-price btn-price-accent">ابدأ رحلتك ←</a>
+      </div>
+
+      <div class="price-card aos" data-d="2">
+        <div class="price-tier">VIP</div>
+        <div class="price-card-title">التحول الكامل</div>
+        <div class="price-card-desc">3 أشهر مكثفة مع كامل الدعم لأسرع تحول حقيقي.</div>
+        <div class="price-divider"></div>
+        <div class="price-amount">
+          <span class="price-currency">$</span>
+          <span class="price-val">349</span>
+        </div>
+        <span class="price-period">/ 3 شهور</span>
+        <ul class="price-feats">
+          <li class="yes">كل مميزات Elite</li>
+          <li class="yes">4 جلسات فيديو شهرياً</li>
+          <li class="yes">برنامج مكملات مخصص</li>
+          <li class="yes">تقرير شهري تفصيلي</li>
+          <li class="yes">أولوية رد خلال ساعة</li>
+          <li class="yes">ضمان نتائج مكتوب</li>
+        </ul>
+        <a href="#contact" class="btn-price btn-price-dark">احجز مقعدك</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOG -->
+<section class="section blog-section">
+  <div class="container">
+    <span class="section-label">المدونة</span>
+    <h2 class="section-title">من مدونتنا</h2>
+    <div class="blog-grid">
+      <div class="blog-card aos">
+        <div class="blog-img-wrap">
+          <img src="/5406581570845478884.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=600&q=80'">
+        </div>
+        <div class="blog-body">
+          <div class="blog-cat">تدريب</div>
+          <div class="blog-title">5 أخطاء شائعة في التمرين تدمر تقدمك</div>
+          <p class="blog-excerpt">تعرف على أكثر الأخطاء اللي بيقع فيها المتدربون وتؤثر سلبًا على نتائجهم.</p>
+          <div class="blog-meta">
+            <span><i class="far fa-calendar"></i> 15 يناير</span>
+            <span><i class="far fa-clock"></i> 5 دقائق</span>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card aos" data-d="1">
+        <div class="blog-img-wrap">
+          <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80" alt="">
+        </div>
+        <div class="blog-body">
+          <div class="blog-cat">تغذية</div>
+          <div class="blog-title">كيف تبني عادات غذائية صحية تدوم مدى الحياة</div>
+          <p class="blog-excerpt">نصائح عملية لتحويل التغذية الصحية إلى أسلوب حياة وليس مجرد نظام مؤقت.</p>
+          <div class="blog-meta">
+            <span><i class="far fa-calendar"></i> 10 يناير</span>
+            <span><i class="far fa-clock"></i> 4 دقائق</span>
+          </div>
+        </div>
+      </div>
+      <div class="blog-card aos" data-d="2">
+        <div class="blog-img-wrap">
+          <img src="/5406581570845478880.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=80'">
+        </div>
+        <div class="blog-body">
+          <div class="blog-cat">مبتدئين</div>
+          <div class="blog-title">دليل المبتدئين الشامل للبدء في اللياقة</div>
+          <p class="blog-excerpt">كل ما تحتاج معرفته قبل أن تبدأ رحلتك في عالم اللياقة البدنية من الصفر.</p>
+          <div class="blog-meta">
+            <span><i class="far fa-calendar"></i> 5 يناير</span>
+            <span><i class="far fa-clock"></i> 6 دقائق</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section faq-section">
+  <div class="container">
+    <div class="faq-layout">
+      <div class="aos">
+        <span class="section-label">أسئلة شائعة</span>
+        <h2 class="section-title">عندك<br>سؤال؟</h2>
+        <p class="section-subtitle">إجابات على أكثر الأسئلة اللي بتدور في بالك.</p>
+      </div>
+      <div class="faq-list aos" data-d="2">
+        <div class="faq-item">
+          <div class="faq-q"><span>إزاي أقدر أختار البرنامج المناسب ليا؟</span><span class="faq-arrow"><i class="fas fa-chevron-down"></i></span></div>
+          <div class="faq-a"><p>بعد الشراء هتتوجه لصفحة اختيار البرنامج مع شرح مفصل لكل برنامج. لو محتار تقدر تحجز استشارة مجانية 30 دقيقة مع الكوتش.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>إزاي بتكون المتابعة اليومية؟</span><span class="faq-arrow"><i class="fas fa-chevron-down"></i></span></div>
+          <div class="faq-a"><p>تواصل يومي عبر الواتساب. هتبعت تقرير عن كل تمرين وهنرد عليك بنصائح وتعديلات خلال ساعات. بنعدل البرنامج كل أسبوعين حسب تقدمك.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>هل البرامج مناسبة للمبتدئين تماماً؟</span><span class="faq-arrow"><i class="fas fa-chevron-down"></i></span></div>
+          <div class="faq-a"><p>أه، عندنا برامج خاصة للمبتدئين مع شرح تفصيلي لكل تمرين وفيديوهات توضيحية. البرامج فيها تدرج في الصعوبة لأمان تام.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>ما هو ضمان استرداد الأموال؟</span><span class="faq-arrow"><i class="fas fa-chevron-down"></i></span></div>
+          <div class="faq-a"><p>لو مش راضي خلال 7 أيام للبرامج الجاهزة أو 14 يوم للمتابعة الكاملة هنرجعلك فلوسك كاملة بدون أي أسئلة.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>ما هي طرق الدفع المتاحة؟</span><span class="faq-arrow"><i class="fas fa-chevron-down"></i></span></div>
+          <div class="faq-a"><p>نقبل Visa وMastercard وPayPal وفودافون كاش وInstaPay وتحويل بنكي. للمزيد تواصل معنا عبر الواتساب.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span>هل في استشارة مجانية قبل ما أبدأ؟</span><span class="faq-arrow"><i class="fas fa-chevron-down"></i></span></div>
+          <div class="faq-a"><p>أه، استشارة مجانية 30 دقيقة — اتواصل بالنموذج أو الواتساب وهنحدد معاك ميعاد مناسب.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculator" class="section calc-section">
+  <div class="container">
+    <span class="section-label">أدوات مجانية</span>
+    <h2 class="section-title" style="margin-bottom:40px;">احسب<br>مؤشراتك</h2>
+    <div class="calc-tabs">
+      <button class="ctab active" data-p="bmi"><i class="fas fa-weight"></i> BMI</button>
+      <button class="ctab" data-p="calories"><i class="fas fa-fire"></i> السعرات</button>
+      <button class="ctab" data-p="macro"><i class="fas fa-chart-pie"></i> الماكرو</button>
+    </div>
+
+    <!-- BMI -->
+    <div class="calc-panel active" id="calc-bmi">
+      <div class="calc-inputs">
+        <h3>احسب مؤشر كتلة الجسم</h3>
+        <div class="calc-field">
+          <label>الجنس</label>
+          <div class="gender-btns">
+            <button class="gbtn active" data-g="male" onclick="setGender(this,'bmi')"><i class="fas fa-mars"></i> ذكر</button>
+            <button class="gbtn" data-g="female" onclick="setGender(this,'bmi')"><i class="fas fa-venus"></i> أنثى</button>
+          </div>
+        </div>
+        <div class="calc-field"><label>الوزن (كجم)</label><input type="number" id="b-weight" placeholder="مثال: 80"></div>
+        <div class="calc-field"><label>الطول (سم)</label><input type="number" id="b-height" placeholder="مثال: 175"></div>
+        <button class="btn-calc" onclick="runBMI()"><i class="fas fa-calculator"></i> احسب الآن</button>
+      </div>
+      <div class="calc-result" id="bmi-result">
+        <div class="calc-placeholder"><i class="fas fa-weight"></i><p>أدخل بياناتك واضغط احسب</p></div>
+      </div>
+    </div>
+
+    <!-- CALORIES -->
+    <div class="calc-panel" id="calc-calories">
+      <div class="calc-inputs">
+        <h3>احسب سعراتك اليومية</h3>
+        <div class="calc-field">
+          <label>الجنس</label>
+          <div class="gender-btns">
+            <button class="gbtn active" data-g="male" onclick="setGender(this,'cal')"><i class="fas fa-mars"></i> ذكر</button>
+            <button class="gbtn" data-g="female" onclick="setGender(this,'cal')"><i class="fas fa-venus"></i> أنثى</button>
+          </div>
+        </div>
+        <div class="calc-field"><label>العمر</label><input type="number" id="c-age" placeholder="25"></div>
+        <div class="calc-field"><label>الوزن (كجم)</label><input type="number" id="c-weight" placeholder="80"></div>
+        <div class="calc-field"><label>الطول (سم)</label><input type="number" id="c-height" placeholder="175"></div>
+        <div class="calc-field">
+          <label>مستوى النشاط</label>
+          <select id="c-act">
+            <option value="1.2">خامل (بدون رياضة)</option>
+            <option value="1.375">خفيف (1-3 أيام)</option>
+            <option value="1.55" selected>متوسط (3-5 أيام)</option>
+            <option value="1.725">نشيط (6-7 أيام)</option>
+            <option value="1.9">نشيط جداً</option>
+          </select>
+        </div>
+        <button class="btn-calc" onclick="runCalories()"><i class="fas fa-fire"></i> احسب الآن</button>
+      </div>
+      <div class="calc-result" id="cal-result">
+        <div class="calc-placeholder"><i class="fas fa-fire"></i><p>أدخل بياناتك واضغط احسب</p></div>
+      </div>
+    </div>
+
+    <!-- MACRO -->
+    <div class="calc-panel" id="calc-macro">
+      <div class="calc-inputs">
+        <h3>احسب توزيع الماكرو</h3>
+        <div class="calc-field"><label>السعرات اليومية</label><input type="number" id="m-cals" placeholder="مثال: 2000"></div>
+        <div class="calc-field">
+          <label>الهدف</label>
+          <select id="m-goal">
+            <option value="loss">حرق دهون 🔥</option>
+            <option value="maintain" selected>الحفاظ على الوزن ⚖️</option>
+            <option value="gain">بناء عضلات 💪</option>
+          </select>
+        </div>
+        <button class="btn-calc" onclick="runMacro()"><i class="fas fa-chart-pie"></i> احسب الآن</button>
+      </div>
+      <div class="calc-result" id="macro-result">
+        <div class="calc-placeholder"><i class="fas fa-chart-pie"></i><p>أدخل بياناتك واضغط احسب</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section contact-section">
+  <div class="container">
+    <span class="section-label">تواصل معنا</span>
+    <h2 class="section-title" style="color:var(--paper);">هنكون<br>معاك</h2>
+    <div class="contact-layout">
+      <div class="contact-info-side aos">
+        <p class="contact-intro">مستعد تبدأ رحلتك؟ تواصل معنا دلوقتي علشان نساعدك توصل لأهدافك.</p>
+        <div class="contact-channels">
+          <a href="https://wa.me/201156021267" class="ch-link" target="_blank">
+            <div class="ch-icon" style="background:#25d366;"><i class="fab fa-whatsapp"></i></div>
+            <div><div class="ch-label">واتساب</div><div class="ch-val">+20 115 602 1267</div></div>
+          </a>
+          <a href="tel:+201156021267" class="ch-link">
+            <div class="ch-icon"><i class="fas fa-phone"></i></div>
+            <div><div class="ch-label">اتصال</div><div class="ch-val">+20 115 602 1267</div></div>
+          </a>
+          <a href="mailto:coach@ahmedgamal.com" class="ch-link">
+            <div class="ch-icon" style="background:#ea4335;"><i class="fas fa-envelope"></i></div>
+            <div><div class="ch-label">إيميل</div><div class="ch-val">coach@ahmedgamal.com</div></div>
+          </a>
+          <div class="ch-link">
+            <div class="ch-icon" style="background:#555;"><i class="fas fa-clock"></i></div>
+            <div><div class="ch-label">ساعات العمل</div><div class="ch-val">10 صباحاً – 10 مساءً</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="aos" data-d="2">
+        <div class="contact-form-wrap">
+          <form id="contactForm">
+            <div class="form-row">
+              <div class="form-group"><label>الاسم</label><input type="text" id="f-name" placeholder="اسمك" required></div>
+              <div class="form-group"><label>الإيميل</label><input type="email" id="f-email" placeholder="email@example.com" required></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>الهاتف</label><input type="tel" id="f-phone" placeholder="01X XXX XXXX" required></div>
+              <div class="form-group">
+                <label>الخدمة</label>
+                <select id="f-service" required>
+                  <option value="">اختار الخدمة</option>
+                  <option>تدريب من المنزل</option>
+                  <option>تدريب من الجيم</option>
+                  <option>برامج التغذية</option>
+                  <option>المتابعة الكاملة</option>
+                  <option>استشارة مجانية</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label>الرسالة</label><textarea id="f-msg" placeholder="أخبرنا عن هدفك..."></textarea></div>
+            <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> أرسل الرسالة</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-banner">
+  <div class="container">
+    <h2>ابدأ رحلتك اليوم</h2>
+    <p>انضم لأكثر من 500 عميل غيّروا حياتهم مع الكوتش أحمد</p>
+    <a href="#contact" class="btn-cta-white"><i class="fas fa-rocket"></i> احجز استشارة مجانية</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#home" class="logo">
+          <div class="logo-mark"><i class="fas fa-dumbbell"></i></div>
+          <div class="logo-text" style="color:var(--paper);">COACH <em>AHMED</em></div>
+        </a>
+        <p>خبير تدريب معتمد مع خبرة أكثر من 10 سنوات. هدفي مساعدتك توصل لأفضل نسخة من نفسك بطريقة علمية وصح.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-whatsapp"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>روابط سريعة</h4>
+        <ul class="footer-links">
+          <li><a href="#programs">البرامج</a></li>
+          <li><a href="#about">عن الكوتش</a></li>
+          <li><a href="#pricing">الباقات</a></li>
+          <li><a href="#testimonials">التقييمات</a></li>
+          <li><a href="#calculator">الحاسبة</a></li>
+          <li><a href="#faq">الأسئلة الشائعة</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>تواصل</h4>
+        <ul class="footer-links">
+          <li><a href="tel:+201156021267">+20 115 602 1267</a></li>
+          <li><a href="mailto:coach@ahmedgamal.com">coach@ahmedgamal.com</a></li>
+          <li><span style="color:rgba(245,242,235,0.25);">القاهرة، مصر</span></li>
+          <li><span style="color:rgba(245,242,235,0.25);">10 ص – 10 م يومياً</span></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>النشرة البريدية</h4>
+        <p style="font-size:13px;color:rgba(245,242,235,0.35);line-height:1.7;">اشترك لتصلك أحدث النصائح والعروض أولاً بأول.</p>
+        <div class="newsletter-input-wrap">
+          <input type="email" class="newsletter-input" placeholder="بريدك الإلكتروني">
+          <button class="btn-newsletter">اشترك ←</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Coach Ahmed Gamal — جميع الحقوق محفوظة</p>
+      <p>تصميم <a href="#">فريق أحمد جمال</a></p>
+    </div>
+  </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop"><i class="fas fa-arrow-up"></i></button>
+<a href="https://wa.me/201156021267" class="wa-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+// PRELOADER
+window.addEventListener('load', () => {
+  const pre = document.getElementById('preloader');
+  setTimeout(() => {
+    pre.style.opacity = '0';
+    setTimeout(() => pre.style.display = 'none', 800);
+  }, 1800);
+});
+
+// SCROLL PROGRESS
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - innerHeight;
+  document.getElementById('progress').style.width = (scrollY / h * 100) + '%';
+  document.querySelector('.header').classList.toggle('scrolled', scrollY > 60);
+  document.getElementById('scrollTop').classList.toggle('show', scrollY > 300);
+});
+
+// SCROLL TOP
+document.getElementById('scrollTop').addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+// HAMBURGER
+const ham = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+ham.addEventListener('click', () => {
+  ham.classList.toggle('active');
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  ham.classList.remove('active'); navLinks.classList.remove('open');
+}));
+
+// FAQ
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!open) item.classList.add('open');
+  });
+});
+
+// AOS
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('animated'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.aos').forEach(el => obs.observe(el));
+
+// SKILL BARS
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.skill-fill').forEach(f => f.style.width = f.dataset.w + '%');
+    }
+  });
+}, { threshold: 0.4 });
+const aboutEl = document.querySelector('.about-content');
+if (aboutEl) skillObs.observe(aboutEl);
+
+// CONTACT FORM
+document.getElementById('contactForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const service = document.getElementById('f-service').value.trim();
+  const msg = document.getElementById('f-msg').value.trim();
+  const waText = encodeURIComponent(`مرحباً كوتش أحمد 👋\n\n📋 طلب جديد من الموقع\n👤 الاسم: ${name}\n📧 الإيميل: ${email}\n📞 الهاتف: ${phone}\n🎯 الخدمة: ${service}\n💬 الرسالة: ${msg}`);
+  window.open(`https://wa.me/201156021267?text=${waText}`, '_blank');
+  showToast('تم إرسال رسالتك! سيتواصل معك الكوتش قريباً ✓');
+  e.target.reset();
+});
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#0a2e1a;border:1px solid #00e676;color:#00e676;padding:14px 28px;border-radius:2px;z-index:9999;font-weight:700;font-size:14px;font-family:var(--font-body);box-shadow:0 10px 30px rgba(0,0,0,0.2);';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='0.3s'; setTimeout(() => t.remove(), 300); }, 3500);
+}
+
+// CALCULATOR
+let gBMI = 'male', gCAL = 'male';
+
+function setGender(btn, type) {
+  const cls = btn.closest('.gender-btns');
+  cls.querySelectorAll('.gbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (type === 'bmi') gBMI = btn.dataset.g;
+  else gCAL = btn.dataset.g;
+}
+
+document.querySelectorAll('.ctab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.ctab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.calc-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('calc-' + tab.dataset.p).classList.add('active');
+  });
+});
+
+function runBMI() {
+  const w = parseFloat(document.getElementById('b-weight').value);
+  const h = parseFloat(document.getElementById('b-height').value) / 100;
+  const res = document.getElementById('bmi-result');
+  if (!w || !h || w < 20 || h < 1) { res.innerHTML = '<div class="calc-placeholder" style="color:var(--accent);"><i class="fas fa-exclamation-circle"></i><p>أدخل بيانات صحيحة</p></div>'; return; }
+  const bmi = (w / (h * h)).toFixed(1);
+  let cat, col;
+  if (bmi < 18.5) { cat = 'نقص في الوزن'; col = '#64b5f6'; }
+  else if (bmi < 25) { cat = 'وزن مثالي ✓'; col = '#4caf50'; }
+  else if (bmi < 30) { cat = 'زيادة في الوزن'; col = '#ff9800'; }
+  else { cat = 'سمنة'; col = 'var(--accent)'; }
+  const iMin = (18.5 * h * h).toFixed(1), iMax = (24.9 * h * h).toFixed(1);
+  res.innerHTML = `<div style="text-align:center;width:100%;">
+    <div style="font-family:var(--font-display);font-size:80px;font-weight:800;color:${col};line-height:1;">${bmi}</div>
+    <div style="font-size:12px;color:var(--text-faint);margin-bottom:8px;font-family:var(--font-mono);">BMI INDEX</div>
+    <div style="display:inline-block;background:${col}22;border:1px solid ${col}55;color:${col};padding:5px 16px;border-radius:2px;font-weight:700;font-size:13px;margin-bottom:16px;">${cat}</div>
+    <div style="font-size:13px;color:var(--text-dim);">الوزن المثالي: <strong style="color:var(--ink)">${iMin} – ${iMax} كجم</strong></div>
+    <a href="#contact" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--ink);color:var(--paper);padding:10px 20px;border-radius:2px;font-size:13px;font-weight:700;text-decoration:none;font-family:var(--font-body);">احجز استشارة ←</a>
+  </div>`;
+}
+
+function runCalories() {
+  const age = parseFloat(document.getElementById('c-age').value);
+  const w = parseFloat(document.getElementById('c-weight').value);
+  const h = parseFloat(document.getElementById('c-height').value);
+  const act = parseFloat(document.getElementById('c-act').value);
+  const res = document.getElementById('cal-result');
+  if (!age || !w || !h) { res.innerHTML = '<div class="calc-placeholder" style="color:var(--accent);"><i class="fas fa-exclamation-circle"></i><p>أدخل كل البيانات</p></div>'; return; }
+  const bmr = gCAL === 'male' ? (10*w)+(6.25*h)-(5*age)+5 : (10*w)+(6.25*h)-(5*age)-161;
+  const tdee = Math.round(bmr * act);
+  const loss = tdee - 500, gain = tdee + 300;
+  res.innerHTML = `<div style="width:100%;">
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-family:var(--font-display);font-size:68px;font-weight:800;color:var(--ink);line-height:1;letter-spacing:-3px;">${tdee}</div>
+      <div style="font-size:12px;color:var(--text-faint);font-family:var(--font-mono);">CALORIES / DAY</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1px solid var(--border);padding:12px 14px;border-radius:2px;">
+        <span style="font-size:13px;color:var(--text-dim);">🔥 هدف التخسيس</span>
+        <span style="font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--accent);">${loss}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1px solid var(--border);padding:12px 14px;border-radius:2px;">
+        <span style="font-size:13px;color:var(--text-dim);">⚖️ الحفاظ على الوزن</span>
+        <span style="font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--ink);">${tdee}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;background:var(--paper);border:1px solid var(--border);padding:12px 14px;border-radius:2px;">
+        <span style="font-size:13px;color:var(--text-dim);">💪 بناء العضلات</span>
+        <span style="font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--gold);">${gain}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function runMacro() {
+  const cals = parseFloat(document.getElementById('m-cals').value);
+  const goal = document.getElementById('m-goal').value;
+  const res = document.getElementById('macro-result');
+  if (!cals || cals < 500) { res.innerHTML = '<div class="calc-placeholder" style="color:var(--accent);"><i class="fas fa-exclamation-circle"></i><p>أدخل سعرات صحيحة</p></div>'; return; }
+  const R = {loss:{p:0.35,c:0.40,f:0.25}, maintain:{p:0.30,c:0.45,f:0.25}, gain:{p:0.30,c:0.50,f:0.20}}[goal];
+  const pg = Math.round(cals*R.p/4), cg = Math.round(cals*R.c/4), fg = Math.round(cals*R.f/9);
+  function bar(pct, col) { return `<div style="height:3px;background:var(--border);margin-top:6px;border-radius:1px;"><div style="height:100%;width:${pct}%;background:${col};border-radius:1px;"></div></div>`; }
+  res.innerHTML = `<div style="width:100%;display:flex;flex-direction:column;gap:16px;">
+    <div style="text-align:center;margin-bottom:4px;">
+      <div style="font-family:var(--font-display);font-size:50px;font-weight:800;color:var(--ink);letter-spacing:-2px;line-height:1;">${cals} <span style="font-size:18px;color:var(--text-faint);">سعرة</span></div>
+    </div>
+    <div style="background:var(--paper);border:1px solid var(--border);padding:14px;border-radius:2px;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:700;color:#64b5f6;">🥩 بروتين</span><span style="font-family:var(--font-display);font-size:22px;color:#64b5f6;">${pg}g</span></div>
+      <div style="font-size:11px;color:var(--text-faint);">${Math.round(R.p*100)}%</div>
+      ${bar(R.p*100,'#64b5f6')}
+    </div>
+    <div style="background:var(--paper);border:1px solid var(--border);padding:14px;border-radius:2px;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:700;color:var(--gold);">🍞 كربوهيدرات</span><span style="font-family:var(--font-display);font-size:22px;color:var(--gold);">${cg}g</span></div>
+      <div style="font-size:11px;color:var(--text-faint);">${Math.round(R.c*100)}%</div>
+      ${bar(R.c*100,'#c49a3c')}
+    </div>
+    <div style="background:var(--paper);border:1px solid var(--border);padding:14px;border-radius:2px;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:13px;font-weight:700;color:#81c784;">🫒 دهون</span><span style="font-family:var(--font-display);font-size:22px;color:#81c784;">${fg}g</span></div>
+      <div style="font-size:11px;color:var(--text-faint);">${Math.round(R.f*100)}%</div>
+      ${bar(R.f*100,'#81c784')}
+    </div>
+  </div>`;
+}
+
+// Newsletter
+document.querySelector('.btn-newsletter').addEventListener('click', () => {
+  const v = document.querySelector('.newsletter-input').value;
+  if (v && v.includes('@')) { showToast('تم الاشتراك في النشرة البريدية ✓'); document.querySelector('.newsletter-input').value = ''; }
+});
+</script>
+</body>
+</html>

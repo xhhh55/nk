@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard — Coach Ahmed</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+    --main: #e10600;
+    --main-light: #ff2d1a;
+    --main-dark: #9b0000;
+    --bg: #060608;
+    --surface: #0e0e12;
+    --card: #13131a;
+    --card2: #18181f;
+    --border: rgba(255,255,255,0.06);
+    --text: #f0f0f0;
+    --muted: #666;
+    --muted2: #444;
+    --success: #00e676;
+    --warning: #ffc107;
+    --info: #64b5f6;
+    --grad: linear-gradient(135deg,#9b0000,#e10600,#ff4500);
+    --grad-gold: linear-gradient(135deg,#f5c518,#ffc107,#ff9800);
+    --grad-green: linear-gradient(135deg,#00c853,#00e676);
+    --grad-blue: linear-gradient(135deg,#1565c0,#64b5f6);
+    --sidebar-w: 260px;
+    --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden;}
+
+/* ── SIDEBAR ── */
+.sidebar{
+    width:var(--sidebar-w);min-height:100vh;
+    background:var(--surface);
+    border-left:1px solid var(--border);
+    display:flex;flex-direction:column;
+    position:fixed;top:0;right:0;
+    z-index:200;transition:transform 0.35s ease;
+}
+.sidebar-logo{
+    padding:28px 24px 20px;
+    border-bottom:1px solid var(--border);
+}
+.logo-mark{
+    display:flex;align-items:center;gap:10px;margin-bottom:4px;
+}
+.logo-icon{
+    width:36px;height:36px;background:var(--grad);
+    border-radius:8px;display:flex;align-items:center;justify-content:center;
+    font-size:16px;color:#fff;flex-shrink:0;
+    clip-path:polygon(0 0,calc(100% - 5px) 0,100% 5px,100% 100%,5px 100%,0 calc(100% - 5px));
+}
+.logo-text{font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:2px;color:#fff;}
+.logo-text span{color:var(--main);}
+.logo-sub{font-size:12px;color:var(--muted);font-weight:600;}
+
+.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;}
+.nav-section{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--muted2);padding:12px 12px 6px;text-transform:uppercase;}
+.nav-item{
+    display:flex;align-items:center;gap:12px;
+    padding:11px 14px;border-radius:10px;cursor:pointer;
+    transition:var(--transition);color:var(--muted);
+    font-size:14px;font-weight:700;text-decoration:none;
+    position:relative;
+}
+.nav-item:hover{background:rgba(255,255,255,0.04);color:#fff;}
+.nav-item.active{background:rgba(225,6,0,0.12);color:var(--main);}
+.nav-item.active::before{
+    content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+    width:3px;height:60%;background:var(--main);border-radius:2px;
+}
+.nav-item i{width:18px;text-align:center;font-size:15px;}
+.nav-badge{
+    margin-right:auto;background:var(--main);color:#fff;
+    font-size:10px;font-weight:900;padding:2px 7px;border-radius:10px;
+}
+
+.sidebar-footer{
+    padding:16px;border-top:1px solid var(--border);
+}
+.user-card{
+    display:flex;align-items:center;gap:10px;
+    background:rgba(255,255,255,0.03);border-radius:10px;padding:10px 12px;
+}
+.user-avatar{
+    width:36px;height:36px;border-radius:50%;
+    background:var(--grad);display:flex;align-items:center;justify-content:center;
+    font-weight:900;color:#fff;font-size:15px;flex-shrink:0;
+}
+.user-name{font-size:13px;font-weight:800;color:#fff;}
+.user-plan{font-size:11px;color:var(--muted);}
+
+/* ── MAIN ── */
+.main{
+    margin-right:var(--sidebar-w);flex:1;
+    min-height:100vh;display:flex;flex-direction:column;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+    background:rgba(6,6,8,0.9);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+    padding:0 32px;height:64px;
+    display:flex;align-items:center;justify-content:space-between;
+    position:sticky;top:0;z-index:100;
+}
+.page-title{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:1.5px;color:#fff;}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-btn{
+    width:38px;height:38px;border-radius:9px;
+    background:rgba(255,255,255,0.04);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);cursor:pointer;transition:var(--transition);
+    position:relative;
+}
+.topbar-btn:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.notif-dot{
+    position:absolute;top:7px;right:7px;
+    width:7px;height:7px;background:var(--main);border-radius:50%;
+    border:1.5px solid var(--bg);
+}
+.week-badge{
+    background:rgba(225,6,0,0.1);border:1px solid rgba(225,6,0,0.2);
+    color:var(--main);padding:6px 14px;border-radius:6px;
+    font-size:13px;font-weight:800;
+}
+
+/* ── CONTENT ── */
+.content{padding:28px 32px;flex:1;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:28px;width:fit-content;}
+.tab{
+    padding:9px 20px;border-radius:7px;font-size:13px;font-weight:800;
+    cursor:pointer;color:var(--muted);transition:var(--transition);
+    display:flex;align-items:center;gap:7px;
+}
+.tab.active{background:var(--grad);color:#fff;}
+.tab:hover:not(.active){color:#fff;background:rgba(255,255,255,0.04);}
+
+/* ── GRID LAYOUTS ── */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.grid-main{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-bottom:20px;}
+
+/* ── STAT CARDS ── */
+.stat-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;padding:20px;
+    transition:var(--transition);position:relative;overflow:hidden;
+}
+.stat-card:hover{border-color:rgba(255,255,255,0.1);transform:translateY(-2px);}
+.stat-card::before{
+    content:'';position:absolute;top:0;right:0;
+    width:60px;height:60px;border-radius:50%;
+    filter:blur(20px);opacity:0.15;
+}
+.stat-card.red::before{background:#e10600;}
+.stat-card.green::before{background:#00e676;}
+.stat-card.gold::before{background:#ffc107;}
+.stat-card.blue::before{background:#64b5f6;}
+
+.stat-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.stat-icon{
+    width:40px;height:40px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:17px;flex-shrink:0;
+}
+.stat-icon.red{background:rgba(225,6,0,0.12);color:var(--main);}
+.stat-icon.green{background:rgba(0,230,118,0.1);color:var(--success);}
+.stat-icon.gold{background:rgba(255,193,7,0.1);color:var(--warning);}
+.stat-icon.blue{background:rgba(100,181,246,0.1);color:var(--info);}
+.stat-change{font-size:12px;font-weight:800;padding:3px 8px;border-radius:5px;}
+.stat-change.up{background:rgba(0,230,118,0.1);color:var(--success);}
+.stat-change.down{background:rgba(225,6,0,0.1);color:var(--main);}
+.stat-val{font-family:'Bebas Neue',cursive;font-size:42px;line-height:1;color:#fff;margin-bottom:4px;}
+.stat-label{font-size:13px;color:var(--muted);font-weight:600;}
+.stat-bar{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:14px;overflow:hidden;}
+.stat-bar-fill{height:100%;border-radius:2px;transition:width 1.2s ease;}
+
+/* ── CHART CARD ── */
+.chart-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;padding:22px;
+}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.card-title{font-size:16px;font-weight:900;color:#fff;}
+.card-subtitle{font-size:12px;color:var(--muted);margin-top:2px;}
+.chart-legend{display:flex;gap:16px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);}
+.legend-dot{width:8px;height:8px;border-radius:50%;}
+canvas{max-height:220px;}
+
+/* ── WORKOUT LOG ── */
+.workout-log{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;overflow:hidden;
+}
+.wl-header{
+    padding:18px 22px;border-bottom:1px solid var(--border);
+    display:flex;justify-content:space-between;align-items:center;
+}
+.wl-item{
+    padding:14px 22px;border-bottom:1px solid rgba(255,255,255,0.04);
+    display:flex;align-items:center;gap:14px;
+    transition:background 0.2s;cursor:pointer;
+}
+.wl-item:hover{background:rgba(255,255,255,0.02);}
+.wl-item:last-child{border-bottom:none;}
+.wl-day{
+    width:44px;height:44px;border-radius:10px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    flex-shrink:0;font-weight:900;
+}
+.wl-day.done{background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.2);}
+.wl-day.today{background:var(--grad);color:#fff;}
+.wl-day.rest{background:rgba(255,255,255,0.04);border:1px solid var(--border);}
+.wl-day.upcoming{background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.08);}
+.wl-day .day-name{font-size:10px;font-weight:800;letter-spacing:0.5px;}
+.wl-day .day-num{font-size:16px;line-height:1;}
+.wl-info{flex:1;}
+.wl-name{font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;}
+.wl-meta{font-size:12px;color:var(--muted);display:flex;gap:12px;}
+.wl-meta span{display:flex;align-items:center;gap:5px;}
+.wl-status{
+    font-size:11px;font-weight:800;padding:4px 10px;border-radius:5px;white-space:nowrap;
+}
+.wl-status.done{background:rgba(0,230,118,0.1);color:var(--success);}
+.wl-status.today{background:var(--grad);color:#fff;}
+.wl-status.rest{background:rgba(255,255,255,0.04);color:var(--muted);}
+.wl-status.upcoming{background:rgba(255,255,255,0.03);color:var(--muted2);}
+
+/* ── NUTRITION RING ── */
+.nutrition-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;padding:22px;
+}
+.ring-wrap{position:relative;width:150px;height:150px;margin:0 auto 20px;}
+.ring-wrap canvas{position:absolute;top:0;right:0;}
+.ring-center{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    text-align:center;
+}
+.ring-pct{font-family:'Bebas Neue',cursive;font-size:34px;color:#fff;line-height:1;}
+.ring-label{font-size:11px;color:var(--muted);}
+.macro-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.macro-row:last-child{border-bottom:none;}
+.macro-name{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:7px;}
+.macro-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.macro-val{font-size:14px;font-weight:800;color:#fff;}
+.macro-bar-wrap{width:80px;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden;}
+.macro-bar-fill{height:100%;border-radius:2px;}
+
+/* ── MEASUREMENTS ── */
+.measurements-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;padding:22px;
+}
+.meas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px;}
+.meas-item{
+    background:rgba(255,255,255,0.02);border:1px solid var(--border);
+    border-radius:10px;padding:14px;text-align:center;
+    transition:var(--transition);
+}
+.meas-item:hover{border-color:rgba(225,6,0,0.2);}
+.meas-icon{font-size:20px;margin-bottom:6px;}
+.meas-val{font-family:'Bebas Neue',cursive;font-size:26px;color:#fff;line-height:1;}
+.meas-unit{font-size:11px;color:var(--muted);}
+.meas-label{font-size:12px;color:var(--muted);margin-top:4px;}
+.meas-change{font-size:11px;font-weight:800;margin-top:4px;}
+.meas-change.better{color:var(--success);}
+.meas-change.worse{color:var(--main);}
+
+/* ── PROGRESS PHOTOS ── */
+.photos-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;padding:22px;
+}
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+.photo-thumb{
+    aspect-ratio:3/4;border-radius:10px;overflow:hidden;
+    position:relative;cursor:pointer;
+    background:rgba(255,255,255,0.03);border:1px solid var(--border);
+}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.photo-thumb:hover img{transform:scale(1.05);}
+.photo-label{
+    position:absolute;bottom:0;left:0;right:0;
+    padding:8px 10px;background:linear-gradient(to top,rgba(0,0,0,0.8),transparent);
+    font-size:11px;font-weight:800;color:#fff;
+}
+.photo-add{
+    aspect-ratio:3/4;border-radius:10px;
+    border:2px dashed rgba(255,255,255,0.1);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;gap:8px;transition:var(--transition);
+    color:var(--muted);
+}
+.photo-add:hover{border-color:rgba(225,6,0,0.3);color:var(--main);}
+.photo-add i{font-size:24px;}
+.photo-add span{font-size:12px;font-weight:700;}
+
+/* ── MESSAGES ── */
+.messages-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+    height:420px;
+}
+.msg-list{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.msg-list::-webkit-scrollbar{width:4px;}
+.msg-list::-webkit-scrollbar-track{background:transparent;}
+.msg-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
+.msg-bubble{max-width:75%;}
+.msg-bubble.coach{align-self:flex-start;}
+.msg-bubble.client{align-self:flex-end;}
+.msg-name{font-size:11px;color:var(--muted);margin-bottom:4px;font-weight:700;}
+.msg-text{
+    padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.6;
+}
+.msg-bubble.coach .msg-text{
+    background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text);
+    border-radius:12px 12px 12px 0;
+}
+.msg-bubble.client .msg-text{
+    background:var(--grad);color:#fff;
+    border-radius:12px 12px 0 12px;
+}
+.msg-time{font-size:10px;color:var(--muted);margin-top:4px;text-align:left;}
+.msg-bubble.client .msg-time{text-align:right;}
+.msg-input-row{
+    padding:12px 16px;border-top:1px solid var(--border);
+    display:flex;gap:10px;align-items:center;
+}
+.msg-input{
+    flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);
+    border-radius:8px;padding:10px 14px;color:#fff;font-size:14px;
+    font-family:'Cairo',sans-serif;transition:border-color 0.3s;
+}
+.msg-input:focus{outline:none;border-color:rgba(225,6,0,0.3);}
+.msg-send{
+    width:38px;height:38px;background:var(--grad);border:none;
+    border-radius:8px;color:#fff;font-size:16px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity 0.2s;flex-shrink:0;
+}
+.msg-send:hover{opacity:0.85;}
+
+/* ── PROGRAM CARD ── */
+.program-view-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:14px;overflow:hidden;
+}
+.program-header-bar{
+    background:var(--grad);padding:20px 22px;
+    display:flex;justify-content:space-between;align-items:center;
+}
+.program-week{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:6px;
+    padding:18px 22px;border-bottom:1px solid var(--border);
+}
+.pw-day{
+    text-align:center;padding:10px 4px;border-radius:8px;cursor:pointer;
+    transition:var(--transition);border:1px solid transparent;
+}
+.pw-day:hover{background:rgba(255,255,255,0.04);}
+.pw-day.active{background:rgba(225,6,0,0.12);border-color:rgba(225,6,0,0.25);}
+.pw-day.done{background:rgba(0,230,118,0.07);border-color:rgba(0,230,118,0.15);}
+.pw-day .d-name{font-size:10px;color:var(--muted);font-weight:700;margin-bottom:4px;}
+.pw-day .d-icon{font-size:18px;}
+.pw-day.active .d-name{color:var(--main);}
+.pw-day.done .d-name{color:var(--success);}
+
+.exercise-list{padding:16px 22px;}
+.ex-item{
+    display:flex;align-items:center;gap:14px;
+    padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.ex-item:last-child{border-bottom:none;}
+.ex-num{
+    width:32px;height:32px;border-radius:8px;
+    background:rgba(225,6,0,0.1);border:1px solid rgba(225,6,0,0.2);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Bebas Neue',cursive;font-size:16px;color:var(--main);flex-shrink:0;
+}
+.ex-info{flex:1;}
+.ex-name{font-size:14px;font-weight:800;color:#fff;margin-bottom:3px;}
+.ex-sets{font-size:12px;color:var(--muted);}
+.ex-done{
+    width:28px;height:28px;border-radius:50%;
+    border:2px solid var(--border);background:transparent;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    font-size:14px;color:transparent;transition:var(--transition);
+    flex-shrink:0;
+}
+.ex-done.checked{background:var(--success);border-color:var(--success);color:#000;}
+
+/* ── GOALS ── */
+.goals-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px;}
+.goal-item{
+    display:flex;align-items:center;gap:14px;
+    padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.goal-item:last-child{border-bottom:none;}
+.goal-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0;}
+.goal-info{flex:1;}
+.goal-name{font-size:14px;font-weight:800;color:#fff;margin-bottom:6px;}
+.goal-progress-bar{height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.goal-bar-fill{height:100%;border-radius:3px;transition:width 1.5s ease;}
+.goal-vals{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px;}
+.goal-pct{font-family:'Bebas Neue',cursive;font-size:22px;flex-shrink:0;}
+
+/* ── BADGE ── */
+.add-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(225,6,0,0.1);border:1px solid rgba(225,6,0,0.2);
+    color:var(--main);padding:7px 14px;border-radius:7px;
+    font-size:13px;font-weight:800;cursor:pointer;transition:var(--transition);
+    font-family:'Cairo',sans-serif;
+}
+.add-btn:hover{background:rgba(225,6,0,0.18);}
+.ghost-btn{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(255,255,255,0.04);border:1px solid var(--border);
+    color:var(--muted);padding:7px 14px;border-radius:7px;
+    font-size:13px;font-weight:800;cursor:pointer;transition:var(--transition);
+    font-family:'Cairo',sans-serif;
+}
+.ghost-btn:hover{background:rgba(255,255,255,0.07);color:#fff;}
+
+/* ── MOBILE MENU ── */
+.mob-menu-btn{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:199;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px;}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.content > *{animation:fadeUp 0.5s ease both;}
+.content > *:nth-child(2){animation-delay:0.05s;}
+.content > *:nth-child(3){animation-delay:0.1s;}
+.content > *:nth-child(4){animation-delay:0.15s;}
+.content > *:nth-child(5){animation-delay:0.2s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+    .grid-4{grid-template-columns:repeat(2,1fr);}
+    .grid-main{grid-template-columns:1fr;}
+}
+@media(max-width:900px){
+    :root{--sidebar-w:0px;}
+    .sidebar{transform:translateX(100%);width:260px;}
+    .sidebar.open{transform:translateX(0);}
+    .sidebar-overlay.open{display:block;}
+    .main{margin-right:0;}
+    .mob-menu-btn{display:block;}
+    .content{padding:20px 16px;}
+    .topbar{padding:0 16px;}
+    .grid-3,.grid-2{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+    .grid-4{grid-template-columns:1fr 1fr;}
+    .tabs{overflow-x:auto;width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo-mark">
+            <div class="logo-icon"><i class="fas fa-dumbbell"></i></div>
+            <div class="logo-text">COACH<span> AHMED</span></div>
+        </div>
+        <div class="logo-sub">لوحة تحكم العميل</div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section">الرئيسية</div>
+        <a class="nav-item active" onclick="showTab('overview')">
+            <i class="fas fa-th-large"></i> نظرة عامة
+        </a>
+        <a class="nav-item" onclick="showTab('program')">
+            <i class="fas fa-dumbbell"></i> برنامج التدريب
+        </a>
+        <a class="nav-item" onclick="showTab('nutrition')">
+            <i class="fas fa-apple-alt"></i> التغذية
+        </a>
+        <a class="nav-item" onclick="showTab('progress')">
+            <i class="fas fa-chart-line"></i> تقدمي
+        </a>
+        <div class="nav-section">التواصل</div>
+        <a class="nav-item" onclick="showTab('messages')">
+            <i class="fas fa-comment-dots"></i> رسائل الكوتش
+            <span class="nav-badge">3</span>
+        </a>
+        <a class="nav-item" onclick="showTab('sessions')">
+            <i class="fas fa-video"></i> الجلسات المباشرة
+        </a>
+        <div class="nav-section">أخرى</div>
+        <a class="nav-item" href="index.html">
+            <i class="fas fa-home"></i> الموقع الرئيسي
+        </a>
+        <a class="nav-item" href="checkout.html">
+            <i class="fas fa-crown"></i> ترقية الباقة
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-card">
+            <div class="user-avatar">م</div>
+            <div>
+                <div class="user-name">محمد أحمد</div>
+                <div class="user-plan">المتابعة الكاملة ⭐</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div style="display:flex;align-items:center;gap:14px;">
+            <button class="mob-menu-btn" onclick="openSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="page-title" id="page-title">نظرة عامة</div>
+        </div>
+        <div class="topbar-right">
+            <div class="week-badge"><i class="fas fa-calendar-week"></i> الأسبوع 6</div>
+            <div class="topbar-btn" onclick="showTab('messages')">
+                <i class="fas fa-bell"></i>
+                <div class="notif-dot"></div>
+            </div>
+            <div class="topbar-btn">
+                <i class="fas fa-cog"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content" id="content"></div>
+
+</div><!-- end .main -->
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const CLIENT = {
+    name: 'محمد أحمد',
+    plan: 'المتابعة الكاملة',
+    startDate: '1 فبراير 2026',
+    week: 6,
+    totalWeeks: 12,
+    coachMsg: 'استمر كده يا محمد! الأسبوع الجاي هنزود الحمل شوية 💪'
+};
+
+const STATS = [
+    { label: 'الوزن الحالي', val: '82', unit: 'كجم', change: '-3.2', dir: 'up', color: 'green', icon: 'fa-weight', bar: 68 },
+    { label: 'نسبة الدهون', val: '18.4', unit: '%',  change: '-2.1', dir: 'up', color: 'red',   icon: 'fa-fire',   bar: 45 },
+    { label: 'كتلة العضلات', val: '66', unit: 'كجم', change: '+1.8', dir: 'up', color: 'gold',  icon: 'fa-bolt',   bar: 82 },
+    { label: 'سعرات اليوم', val: '2140', unit: 'cal', change: '96%',  dir: 'up', color: 'blue',  icon: 'fa-utensils', bar: 96 }
+];
+
+const WORKOUT_WEEK = [
+    { day: 'السبت',  num: '8',  name: 'Push — صدر وكتف وتراي',     sets: 5, mins: 65, status: 'done' },
+    { day: 'الأحد',  num: '9',  name: 'Pull — ظهر وبايسبس',       sets: 5, mins: 58, status: 'done' },
+    { day: 'الاثنين',num: '10', name: 'Legs — أرجل وكور',          sets: 6, mins: 70, status: 'done' },
+    { day: 'الثلاثاء',num:'11', name: 'Upper — جزء علوي كامل',     sets: 5, mins: 60, status: 'today' },
+    { day: 'الأربعاء',num:'12', name: 'Rest Day — تعافي نشط',      sets: 0, mins: 30, status: 'rest' },
+    { day: 'الخميس', num: '13', name: 'Lower — أرجل وإسترنج',      sets: 5, mins: 65, status: 'upcoming' },
+    { day: 'الجمعة', num: '14', name: 'Full Body + Core',           sets: 6, mins: 75, status: 'upcoming' }
+];
+
+const EXERCISES = [
+    { name: 'Bench Press',   sets: '4×8', note: '80kg', done: true },
+    { name: 'Incline DB',    sets: '3×10', note: '28kg', done: true },
+    { name: 'Cable Fly',     sets: '3×12', note: 'خفيف', done: false },
+    { name: 'OHP',           sets: '4×8',  note: '52kg', done: false },
+    { name: 'Lateral Raise', sets: '3×15', note: '12kg', done: false },
+    { name: 'Tricep Push',   sets: '3×12', note: 'بالكابل', done: false },
+];
+
+const MACROS = { protein: { g: 165, target: 170, color: '#64b5f6' }, carbs: { g: 256, target: 270, color: '#ffd54f' }, fat: { g: 68, target: 72, color: '#a5d6a7' } };
+
+const MEASUREMENTS = [
+    { icon: '⚖️', val: '82',   unit: 'كجم', label: 'الوزن',      change: '-3.2 كجم', better: true },
+    { icon: '📏', val: '85',   unit: 'سم',  label: 'الخصر',       change: '-4 سم',    better: true },
+    { icon: '💪', val: '40',   unit: 'سم',  label: 'الذراع',      change: '+2 سم',    better: true },
+    { icon: '🦵', val: '58',   unit: 'سم',  label: 'الفخذ',       change: '+1.5 سم',  better: true },
+    { icon: '🔵', val: '18.4', unit: '%',   label: 'نسبة الدهون', change: '-2.1%',    better: true },
+    { icon: '💪', val: '66',   unit: 'كجم', label: 'الكتلة العضلية', change: '+1.8 كجم', better: true },
+];
+
+const GOALS = [
+    { icon: '⚖️', name: 'الوصول لـ 79 كجم',         current: 3.2, target: 6,  color: '#00e676', unit: 'كجم فقدان' },
+    { icon: '💪', name: 'زيادة الكتلة العضلية +3كجم', current: 1.8, target: 3,  color: '#64b5f6', unit: 'كجم زيادة' },
+    { icon: '🏃', name: 'ركض 5 كم بدون توقف',         current: 3.2, target: 5,  color: '#ffc107', unit: 'كم مسافة' },
+    { icon: '🔥', name: 'نسبة دهون 15%',              current: 3.6, target: 7,  color: '#ff7043', unit: '% انخفاض' },
+];
+
+const MESSAGES = [
+    { from: 'coach', text: 'صباح الخير يا محمد! كيف حالك اليوم؟ جاهز للتمرين؟', time: '8:02 ص' },
+    { from: 'client', text: 'صباح النور كوتش! تمام الحمد لله، جاهز 💪', time: '8:15 ص' },
+    { from: 'coach', text: 'ممتاز! تمرين النهارده Upper Body — ركز على الـ OHP وخلي الحمل ثابت. لو احتجت أي حاجة قولي.', time: '8:17 ص' },
+    { from: 'client', text: 'حاضر! بخدع في الـ Bench Press من أول وجديد؟', time: '9:45 ص' },
+    { from: 'coach', text: 'آه، خد 75kg اليوم مش 80 — جسمك محتاج يتكيف أكتر قبل ما نرجع للوزن القديم 👍', time: '9:50 ص' },
+    { from: 'client', text: 'تمام فاهم! شكراً كوتش', time: '9:52 ص' },
+];
+
+const WEIGHT_DATA = {
+    labels: ['أسبوع 1','أسبوع 2','أسبوع 3','أسبوع 4','أسبوع 5','أسبوع 6'],
+    weights: [85.2, 84.5, 83.8, 83.1, 82.4, 82.0],
+    target:  [85.2, 84.7, 84.2, 83.5, 82.8, 82.2]
+};
+
+// ═══════════════════════════════════════
+// RENDER ENGINE
+// ═══════════════════════════════════════
+var activeTab = 'overview';
+var charts = {};
+
+function showTab(tab) {
+    activeTab = tab;
+    // Update nav
+    document.querySelectorAll('.nav-item').forEach(function(n) {
+        n.classList.remove('active');
+        if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'"+tab+"'")) {
+            n.classList.add('active');
+        }
+    });
+    var titles = {overview:'نظرة عامة', program:'برنامج التدريب', nutrition:'التغذية', progress:'تقدمي', messages:'رسائل الكوتش', sessions:'الجلسات المباشرة'};
+    document.getElementById('page-title').textContent = titles[tab] || tab;
+    var c = document.getElementById('content');
+    c.innerHTML = '';
+    // Destroy old charts
+    Object.values(charts).forEach(function(ch) { try{ch.destroy();}catch(e){} });
+    charts = {};
+
+    if (tab === 'overview')   renderOverview();
+    if (tab === 'program')    renderProgram();
+    if (tab === 'nutrition')  renderNutrition();
+    if (tab === 'progress')   renderProgress();
+    if (tab === 'messages')   renderMessages();
+    if (tab === 'sessions')   renderSessions();
+    closeSidebar();
+}
+
+// ── OVERVIEW ──────────────────────────
+function renderOverview() {
+    var c = document.getElementById('content');
+    // Coach message banner
+    c.innerHTML += '<div style="background:linear-gradient(135deg,rgba(155,0,0,0.15),rgba(225,6,0,0.08));border:1px solid rgba(225,6,0,0.2);border-radius:14px;padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:14px;"><div style="width:42px;height:42px;background:var(--grad);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">👨‍💻</div><div><div style="font-size:12px;color:var(--main);font-weight:800;letter-spacing:1px;margin-bottom:3px;">رسالة الكوتش أحمد</div><div style="font-size:15px;color:#fff;font-weight:700;">' + CLIENT.coachMsg + '</div></div></div>';
+
+    // Stat cards
+    var statsHtml = '<div class="grid-4">';
+    STATS.forEach(function(s) {
+        var isUp = s.dir === 'up';
+        statsHtml += '<div class="stat-card ' + s.color + '">'
+            + '<div class="stat-top"><div class="stat-icon ' + s.color + '"><i class="fas ' + s.icon + '"></i></div>'
+            + '<span class="stat-change up"><i class="fas fa-arrow-up"></i> ' + s.change + '</span></div>'
+            + '<div class="stat-val">' + s.val + '<span style="font-size:18px;color:var(--muted);margin-right:4px;">' + s.unit + '</span></div>'
+            + '<div class="stat-label">' + s.label + '</div>'
+            + '<div class="stat-bar"><div class="stat-bar-fill" style="width:' + s.bar + '%;background:var(--grad' + (s.color==='green'?'-green':s.color==='gold'?'-gold':s.color==='blue'?'-blue':'') + ');"></div></div>'
+            + '</div>';
+    });
+    statsHtml += '</div>';
+    c.innerHTML += statsHtml;
+
+    // Progress bar week
+    var weekPct = Math.round(CLIENT.week / CLIENT.totalWeeks * 100);
+    c.innerHTML += '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin-bottom:20px;">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
+        + '<span style="font-weight:800;color:#fff;">تقدم البرنامج</span>'
+        + '<span style="font-size:13px;color:var(--muted);">الأسبوع ' + CLIENT.week + ' من ' + CLIENT.totalWeeks + '</span></div>'
+        + '<div style="height:8px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;margin-bottom:8px;">'
+        + '<div style="height:100%;width:' + weekPct + '%;background:var(--grad);border-radius:4px;transition:width 1s ease;"></div></div>'
+        + '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);">'
+        + '<span>بدأت: ' + CLIENT.startDate + '</span><span>' + weekPct + '% مكتمل</span></div></div>';
+
+    // Grid: workout log + goals
+    c.innerHTML += '<div class="grid-2" id="overview-bottom"></div>';
+    var bot = document.getElementById('overview-bottom');
+
+    // Workout log (this week)
+    var wlHtml = '<div class="workout-log"><div class="wl-header"><span class="card-title">تمارين الأسبوع</span>'
+        + '<button class="ghost-btn" onclick="showTab(\'program\')"><i class="fas fa-arrow-left"></i> عرض الكل</button></div>';
+    WORKOUT_WEEK.slice(0,5).forEach(function(w) {
+        var statusLabels = {done:'مكتمل ✓', today:'اليوم 🔥', rest:'راحة', upcoming:'قادم'};
+        wlHtml += '<div class="wl-item">'
+            + '<div class="wl-day ' + w.status + '"><div class="d-name">' + w.day.substring(0,3) + '</div><div class="d-icon">'
+            + (w.status==='done'?'✓':w.status==='today'?'🔥':w.status==='rest'?'😴':'○') + '</div></div>'
+            + '<div class="wl-info"><div class="wl-name">' + w.name + '</div>'
+            + '<div class="wl-meta">' + (w.sets>0?'<span><i class="fas fa-layer-group"></i> '+w.sets+' سيت</span>':'')
+            + '<span><i class="fas fa-clock"></i> '+w.mins+' دقيقة</span></div></div>'
+            + '<div class="wl-status ' + w.status + '">' + statusLabels[w.status] + '</div>'
+            + '</div>';
+    });
+    wlHtml += '</div>';
+    bot.innerHTML += wlHtml;
+
+    // Goals
+    var goalsHtml = '<div class="goals-card"><div class="card-header"><div><div class="card-title">أهدافي</div><div class="card-subtitle">التقدم نحو الهدف النهائي</div></div><button class="ghost-btn" onclick="showTab(\'progress\')">التفاصيل</button></div>';
+    GOALS.forEach(function(g) {
+        var pct = Math.round(g.current / g.target * 100);
+        goalsHtml += '<div class="goal-item">'
+            + '<div class="goal-icon">' + g.icon + '</div>'
+            + '<div class="goal-info"><div class="goal-name">' + g.name + '</div>'
+            + '<div class="goal-progress-bar"><div class="goal-bar-fill" style="width:'+pct+'%;background:'+g.color+';"></div></div>'
+            + '<div class="goal-vals"><span>' + g.current + ' ' + g.unit + '</span><span>' + g.target + '</span></div></div>'
+            + '<div class="goal-pct" style="color:'+g.color+'">'+pct+'%</div></div>';
+    });
+    goalsHtml += '</div>';
+    bot.innerHTML += goalsHtml;
+}
+
+// ── PROGRAM ───────────────────────────
+function renderProgram() {
+    var c = document.getElementById('content');
+
+    // Week selector
+    var weekHtml = '<div class="program-view-card" style="margin-bottom:20px;">'
+        + '<div class="program-header-bar"><div><div style="font-family:\'Bebas Neue\',cursive;font-size:22px;color:#fff;letter-spacing:1.5px;">الأسبوع 6 — Upper/Lower Split</div><div style="font-size:13px;color:rgba(255,255,255,0.7);margin-top:2px;">7 تمارين هذا الأسبوع</div></div>'
+        + '<div style="background:rgba(255,255,255,0.15);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:800;color:#fff;">تقدم الأسبوع: 3/7</div></div>'
+        + '<div class="program-week">';
+    var dayIcons = {done:'✅', today:'🔥', rest:'😴', upcoming:'⬜'};
+    WORKOUT_WEEK.forEach(function(w) {
+        weekHtml += '<div class="pw-day ' + w.status + '" onclick="selectDay(this,\'' + w.name + '\')">'
+            + '<div class="d-name">' + w.day.substring(0,3) + '</div>'
+            + '<div class="d-icon">' + dayIcons[w.status] + '</div></div>';
+    });
+    weekHtml += '</div>';
+
+    // Today's exercises
+    weekHtml += '<div class="exercise-list" id="exercise-list">';
+    weekHtml += '<div style="margin-bottom:14px;"><div style="font-size:15px;font-weight:900;color:#fff;">الثلاثاء — Upper Body 🔥</div><div style="font-size:13px;color:var(--muted);margin-top:4px;">60 دقيقة · 5 تمارين</div></div>';
+    EXERCISES.forEach(function(ex, i) {
+        weekHtml += '<div class="ex-item">'
+            + '<div class="ex-num">' + (i+1) + '</div>'
+            + '<div class="ex-info"><div class="ex-name">' + ex.name + '</div>'
+            + '<div class="ex-sets">' + ex.sets + ' · ' + ex.note + '</div></div>'
+            + '<div class="ex-done ' + (ex.done?'checked':'') + '" onclick="toggleEx(this)">' + (ex.done?'✓':'') + '</div>'
+            + '</div>';
+    });
+    weekHtml += '</div></div>';
+    c.innerHTML += weekHtml;
+
+    // Notes from coach
+    c.innerHTML += '<div style="background:rgba(255,193,7,0.06);border:1px solid rgba(255,193,7,0.15);border-radius:14px;padding:18px 22px;">'
+        + '<div style="font-size:13px;color:#ffc107;font-weight:800;margin-bottom:8px;"><i class="fas fa-sticky-note"></i> ملاحظات الكوتش للأسبوع</div>'
+        + '<div style="font-size:14px;color:rgba(255,255,255,0.75);line-height:1.8;">'
+        + '• الـ OHP خلي الوزن على 50kg هذا الأسبوع<br>'
+        + '• ركز على التحكم في النزول (3 ثوان)<br>'
+        + '• الدشداش خلي الراحة بين السيتات 90 ثانية<br>'
+        + '• ابعتلي فيديو للـ Bench Press النهارده'
+        + '</div></div>';
+}
+
+// ── NUTRITION ─────────────────────────
+function renderNutrition() {
+    var c = document.getElementById('content');
+
+    // Stats row
+    c.innerHTML += '<div class="grid-4">'
+        + mkSmallStat('السعرات المستهلكة','2,140','cal','#e10600',92)
+        + mkSmallStat('الهدف اليومي','2,200','cal','#64b5f6',100)
+        + mkSmallStat('الماء المشروب','2.2','لتر','#00e676',88)
+        + mkSmallStat('البروتين','165','جم','#ffc107',97)
+        + '</div>';
+
+    c.innerHTML += '<div class="grid-main" id="nutr-grid"></div>';
+    var ng = document.getElementById('nutr-grid');
+
+    // Macros ring + bars
+    ng.innerHTML += '<div class="nutrition-card"><div class="card-header"><div><div class="card-title">توزيع الماكرو اليوم</div></div></div>'
+        + '<div class="ring-wrap"><canvas id="macroRing" width="150" height="150"></canvas>'
+        + '<div class="ring-center"><div class="ring-pct">92%</div><div class="ring-label">من الهدف</div></div></div>'
+        + Object.entries(MACROS).map(function(e) {
+            var k=e[0], v=e[1];
+            var names={protein:'بروتين',carbs:'كارب',fat:'دهون'};
+            var pct=Math.round(v.g/v.target*100);
+            return '<div class="macro-row">'
+                + '<span class="macro-name"><span class="macro-dot" style="background:'+v.color+'"></span>'+names[k]+'</span>'
+                + '<div class="macro-bar-wrap"><div class="macro-bar-fill" style="width:'+pct+'%;background:'+v.color+'"></div></div>'
+                + '<span class="macro-val">'+v.g+'g</span></div>';
+        }).join('')
+        + '</div>';
+
+    // Meals log
+    var meals = [
+        {time:'7:30 ص', name:'الفطار',   items:'بيض مسلوق ×3 + خبز توست + لبن', cals:480, protein:38},
+        {time:'10:30 ص',name:'وجبة خفيفة',items:'تفاحة + مكسرات + بروتين شيك',   cals:310, protein:28},
+        {time:'1:30 م', name:'الغداء',   items:'دجاج مشوي + أرز + سلطة',         cals:680, protein:52},
+        {time:'4:00 م', name:'ما قبل التمرين',items:'موزة + شوفان',               cals:290, protein:8},
+        {time:'7:30 م', name:'ما بعد التمرين',items:'بروتين شيك + رز + خضار',     cals:380, protein:39},
+    ];
+    var mealHtml = '<div class="chart-card">'
+        + '<div class="card-header"><div class="card-title">سجل وجبات اليوم</div><button class="add-btn"><i class="fas fa-plus"></i> أضف وجبة</button></div>';
+    meals.forEach(function(m) {
+        mealHtml += '<div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);">'
+            + '<div style="background:rgba(225,6,0,0.08);border:1px solid rgba(225,6,0,0.15);border-radius:8px;padding:8px 10px;text-align:center;min-width:56px;">'
+            + '<div style="font-size:11px;color:var(--main);font-weight:800;">'+m.time+'</div></div>'
+            + '<div style="flex:1;"><div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:2px;">'+m.name+'</div>'
+            + '<div style="font-size:12px;color:var(--muted);">'+m.items+'</div></div>'
+            + '<div style="text-align:center;"><div style="font-family:\'Bebas Neue\',cursive;font-size:20px;color:#fff;">'+m.cals+'</div><div style="font-size:10px;color:var(--muted);">cal</div></div>'
+            + '<div style="text-align:center;min-width:44px;"><div style="font-family:\'Bebas Neue\',cursive;font-size:20px;color:#64b5f6;">'+m.protein+'</div><div style="font-size:10px;color:var(--muted);">بروتين</div></div>'
+            + '</div>';
+    });
+    mealHtml += '</div>';
+    ng.innerHTML += mealHtml;
+
+    // Draw ring chart
+    setTimeout(function() {
+        var ctx = document.getElementById('macroRing');
+        if (!ctx) return;
+        charts.ring = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [MACROS.protein.g*4, MACROS.carbs.g*4, MACROS.fat.g*9],
+                    backgroundColor: ['#64b5f6','#ffd54f','#a5d6a7'],
+                    borderWidth: 0, hoverOffset: 4
+                }]
+            },
+            options: { cutout:'72%', plugins:{legend:{display:false},tooltip:{enabled:false}}, animation:{animateRotate:true} }
+        });
+    }, 100);
+}
+
+function mkSmallStat(label, val, unit, color, pct) {
+    return '<div class="stat-card" style="border-top:2px solid '+color+'20;">'
+        + '<div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:8px;">'+label+'</div>'
+        + '<div style="font-family:\'Bebas Neue\',cursive;font-size:36px;color:#fff;line-height:1;">'+val+' <span style="font-size:16px;color:var(--muted);">'+unit+'</span></div>'
+        + '<div class="stat-bar" style="margin-top:10px;"><div class="stat-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'
+        + '</div>';
+}
+
+// ── PROGRESS ──────────────────────────
+function renderProgress() {
+    var c = document.getElementById('content');
+
+    // Weight chart
+    c.innerHTML += '<div class="chart-card" style="margin-bottom:20px;">'
+        + '<div class="card-header"><div><div class="card-title">منحنى الوزن</div><div class="card-subtitle">الأسابيع الـ 6 الماضية</div></div>'
+        + '<div class="chart-legend">'
+        + '<div class="legend-item"><div class="legend-dot" style="background:#e10600;"></div>الوزن الفعلي</div>'
+        + '<div class="legend-item"><div class="legend-dot" style="background:#64b5f6;"></div>المسار المستهدف</div>'
+        + '</div></div>'
+        + '<canvas id="weightChart"></canvas></div>';
+
+    // Measurements
+    c.innerHTML += '<div class="measurements-card" style="margin-bottom:20px;">'
+        + '<div class="card-header"><div class="card-title">القياسات الجسدية</div><button class="add-btn"><i class="fas fa-ruler"></i> تحديث القياسات</button></div>'
+        + '<div class="meas-grid">' + MEASUREMENTS.map(function(m) {
+            return '<div class="meas-item"><div class="meas-icon">'+m.icon+'</div>'
+                + '<div class="meas-val">'+m.val+'</div><div class="meas-unit">'+m.unit+'</div>'
+                + '<div class="meas-label">'+m.label+'</div>'
+                + '<div class="meas-change '+(m.better?'better':'worse')+'">'+m.change+'</div></div>';
+        }).join('') + '</div></div>';
+
+    // Progress photos
+    c.innerHTML += '<div class="photos-card">'
+        + '<div class="card-header"><div class="card-title">صور التقدم</div><button class="add-btn"><i class="fas fa-camera"></i> إضافة صورة</button></div>'
+        + '<div class="photos-grid">'
+        + '<div class="photo-thumb"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=300&q=80" alt=""><div class="photo-label">أسبوع 1</div></div>'
+        + '<div class="photo-thumb"><img src="https://images.unsplash.com/photo-1534367507877-0edd93bd013b?auto=format&fit=crop&w=300&q=80" alt=""><div class="photo-label">أسبوع 3</div></div>'
+        + '<div class="photo-thumb"><img src="https://images.unsplash.com/photo-1549060279-7e168fce7090?auto=format&fit=crop&w=300&q=80" alt=""><div class="photo-label">أسبوع 6</div></div>'
+        + '<div class="photo-add" onclick="alert(\'قريباً: رفع صور التقدم\')"><i class="fas fa-plus"></i><span>إضافة صورة</span></div>'
+        + '</div></div>';
+
+    setTimeout(function() {
+        var ctx = document.getElementById('weightChart');
+        if (!ctx) return;
+        charts.weight = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: WEIGHT_DATA.labels,
+                datasets: [
+                    { label:'الوزن', data: WEIGHT_DATA.weights, borderColor:'#e10600', backgroundColor:'rgba(225,6,0,0.08)', fill:true, tension:0.4, pointBackgroundColor:'#e10600', pointRadius:5, borderWidth:2.5 },
+                    { label:'الهدف', data: WEIGHT_DATA.target, borderColor:'#64b5f6', backgroundColor:'transparent', borderDash:[6,3], tension:0.4, pointRadius:0, borderWidth:1.5 }
+                ]
+            },
+            options: {
+                responsive:true, maintainAspectRatio:true,
+                plugins:{legend:{display:false}},
+                scales:{
+                    x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#666',font:{family:'Cairo'}}},
+                    y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#666',font:{family:'Cairo'}},min:80,max:87}
+                }
+            }
+        });
+    }, 100);
+}
+
+// ── MESSAGES ──────────────────────────
+function renderMessages() {
+    var c = document.getElementById('content');
+    c.innerHTML += '<div class="messages-card">'
+        + '<div class="wl-header"><span class="card-title"><i class="fas fa-comment-dots" style="color:var(--main);margin-left:8px;"></i> محادثة مع الكوتش أحمد</span>'
+        + '<div style="display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;background:var(--success);border-radius:50%;"></div><span style="font-size:12px;color:var(--success);font-weight:700;">متصل الآن</span></div></div>'
+        + '<div class="msg-list" id="msgList"></div>'
+        + '<div class="msg-input-row"><input class="msg-input" id="msgIn" placeholder="اكتب رسالتك..." onkeydown="if(event.key===\'Enter\')sendMsg()"><button class="msg-send" onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button></div>'
+        + '</div>';
+
+    var list = document.getElementById('msgList');
+    MESSAGES.forEach(function(m) {
+        list.innerHTML += buildMsg(m.from, m.text, m.time);
+    });
+    list.scrollTop = list.scrollHeight;
+}
+
+function buildMsg(from, text, time) {
+    return '<div class="msg-bubble '+from+'">'
+        + (from==='coach'?'<div class="msg-name">👨‍💻 الكوتش أحمد</div>':'')
+        + '<div class="msg-text">'+text+'</div>'
+        + '<div class="msg-time">'+time+'</div></div>';
+}
+
+function sendMsg() {
+    var inp = document.getElementById('msgIn');
+    var text = inp.value.trim();
+    if (!text) return;
+    var list = document.getElementById('msgList');
+    var now = new Date();
+    var time = now.getHours()+':'+String(now.getMinutes()).padStart(2,'0');
+    list.innerHTML += buildMsg('client', text, time);
+    inp.value = '';
+    list.scrollTop = list.scrollHeight;
+    // Auto-reply from coach
+    setTimeout(function() {
+        var replies = ['حاضر يا محمد! 💪', 'ممتاز، استمر!', 'تمام، هنكلم عن ده في الجلسة الجاية', 'شغل ممتاز! 🔥', 'اوكي، خد بالك من الأكل النهارده'];
+        var reply = replies[Math.floor(Math.random()*replies.length)];
+        list.innerHTML += buildMsg('coach', reply, time);
+        list.scrollTop = list.scrollHeight;
+    }, 1200);
+}
+
+// ── SESSIONS ──────────────────────────
+function renderSessions() {
+    var c = document.getElementById('content');
+    var sessions = [
+        {day:'الثلاثاء', date:'18 مارس', time:'8:00 م', type:'تحليل الأداء', status:'next', link:'#'},
+        {day:'الخميس',  date:'20 مارس', time:'7:00 م', type:'ورشة تغذية',   status:'soon', link:'#'},
+        {day:'الأحد',   date:'23 مارس', time:'9:00 م', type:'دعم نفسي',     status:'soon', link:'#'},
+        {day:'الثلاثاء', date:'11 مارس', time:'8:00 م', type:'مراجعة الأسبوع', status:'done', link:'#'},
+        {day:'الخميس',  date:'6 مارس',  time:'7:00 م', type:'خطة التغذية',   status:'done', link:'#'},
+    ];
+    var html = '<div class="workout-log"><div class="wl-header"><span class="card-title">الجلسات المباشرة</span>'
+        + '<a href="https://wa.me/201156021267" target="_blank" class="add-btn"><i class="fab fa-whatsapp"></i> احجز جلسة إضافية</a></div>';
+    sessions.forEach(function(s) {
+        var statusLabel = {next:'التالية 🔴', soon:'قادمة', done:'منتهية ✓'}[s.status];
+        var statusColor = {next:'var(--main)', soon:'var(--warning)', done:'var(--muted)'}[s.status];
+        html += '<div class="wl-item">'
+            + '<div class="wl-day ' + (s.status==='done'?'done':s.status==='next'?'today':'upcoming') + '">'
+            + '<div class="d-name">' + s.day.substring(0,3) + '</div>'
+            + '<div class="d-icon">' + (s.status==='done'?'✓':s.status==='next'?'🔴':'📅') + '</div></div>'
+            + '<div class="wl-info"><div class="wl-name">' + s.type + '</div>'
+            + '<div class="wl-meta"><span><i class="fas fa-calendar"></i> '+s.date+'</span><span><i class="fas fa-clock"></i> '+s.time+'</span></div></div>'
+            + '<span style="font-size:12px;font-weight:800;color:'+statusColor+';">'+statusLabel+'</span>'
+            + (s.status!=='done'?'<a href="'+s.link+'" style="background:var(--grad);color:#fff;padding:7px 14px;border-radius:7px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap;">انضم</a>':'')
+            + '</div>';
+    });
+    html += '</div>';
+    c.innerHTML += html;
+}
+
+// ── HELPERS ───────────────────────────
+function toggleEx(el) {
+    el.classList.toggle('checked');
+    el.textContent = el.classList.contains('checked') ? '✓' : '';
+}
+function selectDay(el, name) {
+    document.querySelectorAll('.pw-day').forEach(function(d){d.classList.remove('active');});
+    el.classList.add('active');
+}
+function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+}
+
+// ── INIT ──────────────────────────────
+showTab('overview');
+</script>
+</body>
+</html>
